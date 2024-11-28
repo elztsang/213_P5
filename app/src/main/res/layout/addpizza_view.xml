@@ -44,6 +44,12 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <Switch
+            android:id="@+id/switch1"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="Build Your Own?" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
