@@ -1,0 +1,66 @@
+package com.example.androidpizzaria;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.RadioButton;
+import android.widget.Toast;
+
+import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+
+public class MainMenuController extends AppCompatActivity {
+    Singleton singleton = Singleton.getInstance(); //use this to obtain data
+    private Button bt_createOrder, bt_manageOrder;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.mainmenu_view);
+        findID();
+        initClickListeners();
+    }
+
+    /**
+     * Find the references of the GUI objects.
+     * prefix rb - RadioButton objects
+     * prefix cx - CheckBox objects
+     * prefix cp - Chip objects
+     */
+    private void findID() {
+        bt_createOrder = findViewById(R.id.bt_createOrder);
+        bt_manageOrder = findViewById(R.id.bt_manageOrder);
+    }
+
+    private void initClickListeners() {
+        bt_createOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onCreateOrderClick();
+            }
+        });
+
+        bt_manageOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onManageOrderClick();
+            }
+        });
+    }
+
+    public void onCreateOrderClick() {
+        Intent intent = new Intent(this, CreateOrderController.class);
+        startActivity(intent);
+    }
+
+    public void onManageOrderClick() {
+        Intent intent = new Intent(this, ManageOrderController.class);
+        startActivity(intent);
+    }
+
+}
