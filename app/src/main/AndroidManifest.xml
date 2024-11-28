@@ -16,7 +16,56 @@
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name"
+            android:theme="@style/Theme.AppCompat.Light">
+            <!--
             android:theme="@style/Theme.AndroidPizzaria">
+            idk why it cant find the theme above - todo: figure out later
+            -->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ManageOrderActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.AppCompat.Light">
+            <!--
+            android:theme="@style/Theme.AndroidPizzaria">
+            idk why it cant find the theme above - todo: figure out later
+            -->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".CreateOrderActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.AppCompat.Light">
+            <!--
+            android:theme="@style/Theme.AndroidPizzaria">
+            idk why it cant find the theme above - todo: figure out later
+            -->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".AddPizzaActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.AppCompat.Light">
+            <!--
+            android:theme="@style/Theme.AndroidPizzaria">
+            idk why it cant find the theme above - todo: figure out later
+            -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

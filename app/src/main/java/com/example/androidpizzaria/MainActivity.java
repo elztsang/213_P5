@@ -4,17 +4,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.RadioButton;
-import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
-public class MainMenuController extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity {
     Singleton singleton = Singleton.getInstance(); //use this to obtain data
     private Button bt_createOrder, bt_manageOrder;
 
@@ -22,6 +15,7 @@ public class MainMenuController extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.mainmenu_view);
+
         findID();
         initClickListeners();
     }
@@ -54,12 +48,12 @@ public class MainMenuController extends AppCompatActivity {
     }
 
     public void onCreateOrderClick() {
-        Intent intent = new Intent(this, CreateOrderController.class);
+        Intent intent = new Intent(this, CreateOrderActivity.class);
         startActivity(intent);
     }
 
     public void onManageOrderClick() {
-        Intent intent = new Intent(this, ManageOrderController.class);
+        Intent intent = new Intent(this, ManageOrderActivity.class);
         startActivity(intent);
     }
 
