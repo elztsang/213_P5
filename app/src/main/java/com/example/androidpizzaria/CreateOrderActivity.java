@@ -1,5 +1,6 @@
 package com.example.androidpizzaria;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -8,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class CreateOrderActivity extends AppCompatActivity{
     Singleton singleton = Singleton.getInstance();
-    Button bt_addPizzas, bt_addOrder;
+    private Button bt_addPizzas, bt_addOrder;
 
 
     @Override
@@ -16,7 +17,7 @@ public class CreateOrderActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.createorder_view);
         findID();
-        //initClickListeners();
+        initClickListeners();
     }
 
     private void findID() {
@@ -40,12 +41,18 @@ public class CreateOrderActivity extends AppCompatActivity{
         });
     }
 
+    //maybe rename this button and method to be a bit less confusing
+    //this one is to navigate to the adding pizza menu
     private void onAddPizzasClick() {
-
+        Intent intent = new Intent(this, AddPizzaActivity.class);
+        startActivity(intent);
     }
 
     private void onAddOrderClick() {
-
+        //add order
+        singleton.getOrderList().add(singleton.getOrder());
+        //todo: temp debugging print - replace with a toast or smth
+        System.out.println("added order: singleton.getOrder()");
     }
 
 }

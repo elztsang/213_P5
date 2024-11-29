@@ -13,26 +13,27 @@
         tools:src="@tools:sample/avatars" />
 
     <RadioGroup
+        android:id="@+id/rg_size"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
         <RadioButton
-            android:id="@+id/radioButton"
+            android:id="@+id/rb_small"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_weight=".33"
             android:text="Small" />
 
         <RadioButton
-            android:id="@+id/radioButton2"
+            android:id="@+id/rb_medium"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_weight=".33"
             android:text="Medium" />
 
         <RadioButton
-            android:id="@+id/radioButton3"
+            android:id="@+id/rb_large"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_weight=".33"
@@ -51,12 +52,13 @@
             android:text="Build Your Own?" />
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_pizzaOptions"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </LinearLayout>
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/bt_addPizza"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Add Pizza" />
