@@ -16,7 +16,7 @@ public class Singleton {
     private ArrayList<Order> orderList;
 
     private Singleton() {
-        //idk if we need this?
+        //idk what to set for these just yet
     }
 
     public static Singleton getInstance() {
@@ -41,8 +41,11 @@ public class Singleton {
         return orderList;
     }
 
-    public Order setOrder(Order order) {
+    public void setOrder(Order order) {
         this.order = order;
-        return this.order;
+    }
+
+    public void setPizza(Pizza pizza) {
+        this.pizza = pizza;
     }
 }

@@ -3,12 +3,15 @@ package com.example.androidpizzaria;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Switch;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import pizzaria.PizzaFactory;
 import pizzaria.Size;
 
 public class AddPizzaActivity extends AppCompatActivity{
@@ -23,6 +26,11 @@ public class AddPizzaActivity extends AppCompatActivity{
     RecyclerView rv_pizzaOptions;
     RadioButton rb_small, rb_medium, rb_large;
     RadioGroup rg_size;
+    Switch sw_byo;
+
+    private Size selectedSize;
+    private PizzaFactory pizzaStyle;
+    private boolean isBYO;
 
 
     @Override
@@ -32,7 +40,8 @@ public class AddPizzaActivity extends AppCompatActivity{
         findID();
         initClickListeners();
         initSizeListener();
-        //initPizzaOptionListener();
+        //initPizzaOptionListener(); //listener for non-byo
+        initSwitchListener();
     }
 
     private void findID() {
@@ -43,6 +52,7 @@ public class AddPizzaActivity extends AppCompatActivity{
         rb_small = findViewById(R.id.rb_small);
         rb_medium = findViewById(R.id.rb_medium);
         rb_large = findViewById(R.id.rb_large);
+        sw_byo = findViewById(R.id.sw_byo);
     }
 
     private void initClickListeners() {
@@ -54,16 +64,28 @@ public class AddPizzaActivity extends AppCompatActivity{
         });
     }
 
+    private void initSwitchListener() {
+        sw_byo.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                //change flag to check pizza type
+                isBYO = true;
+            } else {
+                isBYO = false;
+            }
+        });
+    }
     private void initSizeListener() {
         rg_size.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
+                //small note to self - ron
+                //we hold the sizes for later when we click add pizza
                 if (checkedId == rb_small.getId()) {
-                    singleton.getPizza().setSize(Size.SMALL);
+                    selectedSize = Size.SMALL;
                 } else if (checkedId == rb_medium.getId()) {
-                    singleton.getPizza().setSize(Size.MEDIUM);
+                    selectedSize = Size.MEDIUM;
                 } else if (checkedId == rb_large.getId()) {
-                    singleton.getPizza().setSize(Size.LARGE);
+                    selectedSize = Size.LARGE;
                 } else {
                     //print some error somewhere
                     System.out.println("please select a size");
@@ -73,6 +95,20 @@ public class AddPizzaActivity extends AppCompatActivity{
     }
 
     private void onAddPizzaClick() {
-        singleton.getPizzaList().add(singleton.getPizza());
+        //todo: check P4 for all the validity checks
+        if (singleton.getPizza() != null) {
+            //set size, pizzastyle, type
+            //getRVSelection();
+            singleton.getPizza().setSize(selectedSize);
+            singleton.getPizzaList().add(singleton.getPizza());
+        } else {
+            //display error somewhere else
+            System.out.println("unable to add pizza");
+        }
+    }
+
+    private void getRVSelection() {
+        //todo: get selected pizza style and type from selection in RV, also populate rv
+        //todo: figureout what to do for BYO selection + toppings
     }
 }

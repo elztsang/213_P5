@@ -50,9 +50,16 @@ public class CreateOrderActivity extends AppCompatActivity{
 
     private void onAddOrderClick() {
         //add order
-        singleton.getOrderList().add(singleton.getOrder());
-        //todo: temp debugging print - replace with a toast or smth
-        System.out.println("added order: singleton.getOrder()");
+        if (singleton.getPizza() != null) {
+            //todo: set order pizzalist(?)
+            singleton.getOrderList().add(singleton.getOrder());
+            //todo: temp debugging print - replace with a toast or smth
+            System.out.println("added order: singleton.getOrder()");
+        } else {
+            //display error somewhere else
+            System.out.println("unable to add order");
+        }
+
     }
 
 }
