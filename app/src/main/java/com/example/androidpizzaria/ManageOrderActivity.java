@@ -74,4 +74,13 @@ public class ManageOrderActivity extends AppCompatActivity{
             e.printStackTrace();
         }
     }
+
+    //todo: method to populate spinner and method to populate listview on select
+    private void populateSpinner() {
+
+    }
+
+    private void populateListView() {
+
+    }
 }

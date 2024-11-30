@@ -109,6 +109,11 @@ public class AddPizzaActivity extends AppCompatActivity{
 
     private void getRVSelection() {
         //todo: get selected pizza style and type from selection in RV, also populate rv
-        //todo: figureout what to do for BYO selection + toppings
+        //todo: figure out what to do for BYO selection + toppings
+    }
+
+    //todo: method to populate recycler view
+    private void populateRecyclerView() {
+
     }
 }

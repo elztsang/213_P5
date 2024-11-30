@@ -62,4 +62,13 @@ public class CreateOrderActivity extends AppCompatActivity{
 
     }
 
+    //todo: create method to populate the listview/recycle view for current order
+    private void populateCurrentOrder(){
+
+    }
+
+    //todo: create method to remove selected pizza on select or a button associated with the pizza
+    private void onRemoveSelectedPizzaClick() {
+
+    }
 }
