@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -112,6 +113,7 @@ public class ManageOrderActivity extends AppCompatActivity{
             pw.close();
         } catch (IOException e) {
             //todo: change the print statement to toast
+            Toast.makeText(getApplicationContext(), "An error occurred during export.", Toast.LENGTH_SHORT).show();
             System.out.println("An error occurred.");
             e.printStackTrace();
         }
@@ -148,7 +150,9 @@ public class ManageOrderActivity extends AppCompatActivity{
             public void onNothingSelected(AdapterView<?> parentView) {
                 dataAdapter.clear();
                 dataAdapter.notifyDataSetChanged();
-                System.out.println("some error");
+
+                Toast.makeText(getApplicationContext(), "No order selected!", Toast.LENGTH_SHORT).show();
+                //System.out.println("some error");
             }
         });
     }

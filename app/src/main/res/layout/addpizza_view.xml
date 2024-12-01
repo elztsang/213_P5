@@ -74,7 +74,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_toppingOptions"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="100dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -95,10 +95,11 @@
             android:layout_weight=".5"
             android:text="Add Pizza" />
     </LinearLayout>
+
         <Button
             android:id="@+id/bt_addPizza"
             android:layout_width="match_parent"
-            android:layout_height="25dp"
+            android:layout_height="48dp"
             android:text="Add Pizza" />
 
     </LinearLayout>

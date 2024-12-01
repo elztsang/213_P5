@@ -7,6 +7,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -98,11 +99,13 @@ public class CreateOrderActivity extends AppCompatActivity{
             //todo: set order pizzalist(?)
             singleton.getOrderList().add(singleton.getOrder());
             //todo: temp debugging print - replace with a toast or smth
-            System.out.println("added order: " + singleton.getOrder());
+            Toast.makeText(getApplicationContext(), "Successfully added order!", Toast.LENGTH_SHORT).show();
+            //System.out.println("added order: " + singleton.getOrder());
             singleton.setOrder(new Order());
         } else {
             //display error somewhere else
-            System.out.println("unable to add order");
+            Toast.makeText(getApplicationContext(), "Unable to add order!", Toast.LENGTH_SHORT).show();
+            //System.out.println("unable to add order");
         }
 
     }

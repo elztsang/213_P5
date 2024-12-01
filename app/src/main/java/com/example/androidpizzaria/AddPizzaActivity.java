@@ -11,6 +11,7 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.ListView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -124,7 +125,8 @@ public class AddPizzaActivity extends AppCompatActivity{
                     selectedSize = Size.LARGE;
                 } else {
                     //TODO: make this a popup instead (forgot the name of it)
-                    System.out.println("please select a size");
+                    Toast.makeText(getApplicationContext(), "Please select a size", Toast.LENGTH_SHORT).show();
+                    //System.out.println("please select a size");
                 }
             }
         });
@@ -153,7 +155,8 @@ public class AddPizzaActivity extends AppCompatActivity{
             singleton.getPizzaList().add(singleton.getPizza());
         } else {
             //display error somewhere else
-            System.out.println("unable to add pizza");
+            Toast.makeText(getApplicationContext(), "Unable to add pizza!", Toast.LENGTH_SHORT).show();
+            //System.out.println("unable to add pizza");
         }
     }
 
