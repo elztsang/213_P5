@@ -2,6 +2,8 @@ package com.example.androidpizzaria;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -12,7 +14,11 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import pizzaria.ChicagoPizza;
 import pizzaria.Order;
+import pizzaria.Pizza;
+import pizzaria.PizzaFactory;
+import pizzaria.Size;
 
 public class ManageOrderActivity extends AppCompatActivity{
     Singleton singleton = Singleton.getInstance();
@@ -27,6 +33,9 @@ public class ManageOrderActivity extends AppCompatActivity{
         setContentView(R.layout.manageorder_view);
         findID();
         initClickListeners();
+        setTestOrderList(); //for testing todo: delete later
+        updateSpinner();
+        populateListView();
     }
 
     private void findID() {
@@ -40,12 +49,16 @@ public class ManageOrderActivity extends AppCompatActivity{
         bt_removeOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                removeOrder((Order) sp_selectOrder.getSelectedItem());
+                Order selectedOrder = (Order) sp_selectOrder.getSelectedItem();
+                singleton.getOrderList().remove(selectedOrder);
+
+                updateSpinner();
             }
         });
         bt_exportOrders.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //addOrderTEMP(); //for testing - todo: delete later
                 exportOrders();
             }
         });
@@ -75,12 +88,70 @@ public class ManageOrderActivity extends AppCompatActivity{
         }
     }
 
-    //todo: method to populate spinner and method to populate listview on select
-    private void populateSpinner() {
+    private void updateSpinner() {
+        ArrayAdapter<Order> dataAdapter = new ArrayAdapter<Order>(this,
+                android.R.layout.simple_spinner_item,
+                singleton.getOrderList());
 
+        dataAdapter.notifyDataSetChanged();
+        sp_selectOrder.setAdapter(dataAdapter);
     }
 
     private void populateListView() {
+        ArrayAdapter<Pizza> dataAdapter = new ArrayAdapter<Pizza>(this,
+                android.R.layout.simple_list_item_1,
+                singleton.getOrder().getPizzas()); // may need to change
 
+        lv_selectedOrder.setAdapter(dataAdapter);
+
+        sp_selectOrder.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                Order selectedOrder = (Order) parentView.getItemAtPosition(position);
+
+                dataAdapter.clear();
+                dataAdapter.addAll(selectedOrder.getPizzas());
+                dataAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                System.out.println("some error");
+            }
+
+        });
+    }
+
+    //todo: delete later
+    private void setTestOrderList() {
+        PizzaFactory pf = new ChicagoPizza();
+        Pizza tp = pf.createMeatzza();
+        tp.setSize(Size.SMALL);
+
+        Order order1 = new Order();
+        Order order2 = new Order();
+        Order order3 = new Order();
+        order1.addPizza(tp);
+        order3.addPizza(tp);
+        order3.addPizza(tp);
+        order3.addPizza(tp);
+        order3.addPizza(tp);
+
+        singleton.getOrderList().add(order1);
+        singleton.getOrderList().add(order2);
+        singleton.getOrderList().add(order3);
+    }
+
+    //todo: delete later
+    private void addOrderTEMP() {
+        System.out.println(singleton.getOrderList());
+        PizzaFactory pf = new ChicagoPizza();
+        Pizza tp = pf.createMeatzza();
+        tp.setSize(Size.SMALL);
+
+        Order order = new Order();
+        order.addPizza(tp);
+        order.setOrderNumber(21);
+        singleton.getOrderList().add(order);
     }
 }

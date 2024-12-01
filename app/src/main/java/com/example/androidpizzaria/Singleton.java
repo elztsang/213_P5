@@ -16,7 +16,10 @@ public class Singleton {
     private ArrayList<Order> orderList;
 
     private Singleton() {
-        //idk what to set for these just yet
+        orderList = new ArrayList<>();
+        order = new Order();
+        pizzaList = new ArrayList<>();
+        //idk what to set for pizza/pizzafactory yet
     }
 
     public static Singleton getInstance() {
