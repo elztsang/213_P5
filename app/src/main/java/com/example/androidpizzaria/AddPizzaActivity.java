@@ -12,6 +12,7 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.ListView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -103,18 +104,22 @@ public class AddPizzaActivity extends AppCompatActivity implements AdapterView.O
     }
 
     private void initSizeListener() {
-        rg_size.setOnCheckedChangeListener((group, checkedId) -> {
-            //small note to self - ron
-            //we hold the sizes for later when we click add pizza
-            if (checkedId == rb_small.getId()) {
-                selectedSize = Size.SMALL;
-            } else if (checkedId == rb_medium.getId()) {
-                selectedSize = Size.MEDIUM;
-            } else if (checkedId == rb_large.getId()) {
-                selectedSize = Size.LARGE;
-            } else {
-                //TODO: make this a popup instead (forgot the name of it)
-                System.out.println("please select a size");
+        rg_size.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                //small note to self - ron
+                //we hold the sizes for later when we click add pizza
+                if (checkedId == rb_small.getId()) {
+                    selectedSize = Size.SMALL;
+                } else if (checkedId == rb_medium.getId()) {
+                    selectedSize = Size.MEDIUM;
+                } else if (checkedId == rb_large.getId()) {
+                    selectedSize = Size.LARGE;
+                } else {
+                    //TODO: make this a popup instead (forgot the name of it)
+                    Toast.makeText(getApplicationContext(), "Please select a size", Toast.LENGTH_SHORT).show();
+                    //System.out.println("please select a size");
+                }
             }
         });
     }
@@ -151,8 +156,9 @@ public class AddPizzaActivity extends AppCompatActivity implements AdapterView.O
             singleton.getPizza().setSize(selectedSize);
             singleton.getPizzaList().add(singleton.getPizza());
         } else {
-            //TODO: make as alert popup
-            System.out.println("unable to add pizza");
+            //display error somewhere else
+            Toast.makeText(getApplicationContext(), "Unable to add pizza!", Toast.LENGTH_SHORT).show();
+            //System.out.println("unable to add pizza");
         }
     }
 

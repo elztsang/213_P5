@@ -2,12 +2,14 @@ package com.example.androidpizzaria;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -37,6 +39,7 @@ public class ManageOrderActivity extends AppCompatActivity{
         setTestOrderList(); //for testing todo: delete later
         updateSpinner();
         populateListView();
+        toggleRemoveOrderIfEmpty();
     }
 
     private void findID() {
@@ -53,8 +56,9 @@ public class ManageOrderActivity extends AppCompatActivity{
             public void onClick(View v) {
                 Order selectedOrder = (Order) sp_selectOrder.getSelectedItem();
                 singleton.getOrderList().remove(selectedOrder);
-
                 updateSpinner();
+                toggleRemoveOrderIfEmpty();
+                clearLVIfEmpty();
             }
         });
 
@@ -74,12 +78,33 @@ public class ManageOrderActivity extends AppCompatActivity{
         });
     }
 
+    private void toggleRemoveOrderIfEmpty() {
+        if (singleton.getOrderList().isEmpty()) {
+            bt_removeOrder.setEnabled(false);
+        } else {
+            bt_removeOrder.setEnabled(true);
+        }
+    }
+
+    private void clearLVIfEmpty() {
+        ArrayAdapter<Pizza> dataAdapter = new ArrayAdapter<Pizza>(this,
+                android.R.layout.simple_list_item_1,
+                singleton.getOrder().getPizzas());
+
+        if (singleton.getOrderList().isEmpty()) {
+            dataAdapter.clear();
+            dataAdapter.notifyDataSetChanged();
+            lv_selectedOrder.setAdapter(dataAdapter);
+
+        }
+    }
+
     //taken from p4 - todo: figure out how to fix this -> open failed: EROFS (Read-only file system)
     private void exportOrders() {
         try {
-            File output = new File("exported_orders.txt");
+            File output = new File(getFilesDir() + "/exported_orders.txt");
             if (output.exists()) {
-                System.exit(1);
+                //System.exit(1);
             }
             PrintWriter pw = new PrintWriter(output);
             for (Order order : singleton.getOrderList()) {
@@ -88,6 +113,7 @@ public class ManageOrderActivity extends AppCompatActivity{
             pw.close();
         } catch (IOException e) {
             //todo: change the print statement to toast
+            Toast.makeText(getApplicationContext(), "An error occurred during export.", Toast.LENGTH_SHORT).show();
             System.out.println("An error occurred.");
             e.printStackTrace();
         }
@@ -122,9 +148,12 @@ public class ManageOrderActivity extends AppCompatActivity{
 
             @Override
             public void onNothingSelected(AdapterView<?> parentView) {
-                System.out.println("some error");
-            }
+                dataAdapter.clear();
+                dataAdapter.notifyDataSetChanged();
 
+                Toast.makeText(getApplicationContext(), "No order selected!", Toast.LENGTH_SHORT).show();
+                //System.out.println("some error");
+            }
         });
     }
 
