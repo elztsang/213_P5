@@ -9,17 +9,30 @@
         android:layout_width="match_parent"
         android:layout_height="500dp" />
 
-    <Button
-        android:id="@+id/bt_addPizzas"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_weight="1"
-        android:text="Add Pizzas" />
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/bt_addOrder"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_weight="1"
+            android:text="Add Order" />
+
+        <Button
+            android:id="@+id/bt_addPizzas"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_weight="1"
+            android:text="Add Pizzas" />
+    </LinearLayout>
 
     <Button
-        android:id="@+id/bt_addOrder"
+        android:id="@+id/bt_createBackButton"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_weight="1"
-        android:text="Add Order" />
+        android:layout_height="wrap_content"
+        android:text="Return To Main Menu" />
+
 </LinearLayout>

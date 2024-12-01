@@ -1,5 +1,6 @@
 package com.example.androidpizzaria;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -30,10 +31,8 @@ public class AddPizzaActivity extends AppCompatActivity{
 //    private static final int RBMEDIUM = R.id.rb_medium;
 //    private static final int RBLARGE = R.id.rb_large;
 
-    private final List<ToggleButton> toggleButtons = new ArrayList<>();
-
     Singleton singleton = Singleton.getInstance();
-    Button bt_addPizza;
+    Button bt_addPizza, bt_addPizzaBack;
     RecyclerView rv_toppingOptions;
     RadioButton rb_small, rb_medium, rb_large;
     RadioGroup rg_size;
@@ -48,15 +47,14 @@ public class AddPizzaActivity extends AppCompatActivity{
     ObservableArrayList<Topping> toppingOptions; //might not need
     //might need another array for "selected toppings"; premade pizzas will set this automatically, byo will get to choose
 
-    //TODO:
+    //TODO: set up lists of "premade" toppings to assign to recycler view
+    //also need to make sure recycler view is not selectable when byo is selected
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.addpizza_view);
         findID();
-        toggleButtons.add(tb_chicago);
-        toggleButtons.add(tb_ny);
         initToppingOptions();   //need a listener for pizza type?
         initClickListeners();
         initToggleListener();
@@ -73,8 +71,9 @@ public class AddPizzaActivity extends AppCompatActivity{
 
     private void findID() {
         //set all buttons n stuff here
-        bt_addPizza = bt_addPizza.findViewById(R.id.bt_addPizza);
-        rv_toppingOptions = rv_toppingOptions.findViewById(R.id.rv_toppingOptions); // need to fix issue here
+        bt_addPizza = findViewById(R.id.bt_addPizza);
+        bt_addPizzaBack = findViewById(R.id.bt_addPizzaBack);
+        rv_toppingOptions = rv_toppingOptions.findViewById(R.id.rv_toppingOptions);
         rg_size = rg_size.findViewById(R.id.rg_size);
         rb_small = rb_small.findViewById(R.id.rb_small);
         rb_medium = rb_medium.findViewById(R.id.rb_medium);
@@ -90,6 +89,13 @@ public class AddPizzaActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 onAddPizzaClick();
+            }
+        });
+
+        bt_addPizzaBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                returnToCreateOrder();
             }
         });
     }
@@ -154,10 +160,16 @@ public class AddPizzaActivity extends AppCompatActivity{
     private void getRVSelection() {
         //todo: get selected pizza style and type from selection in RV, also populate rv
         //todo: figure out what to do for BYO selection + toppings
+        //not sure if this method is needed yet, need to look more into adapter capabilities -elz
     }
 
-    //todo: method to populate recycler view
-    private void populateRecyclerView() { // i think we will use this for toppings
+//    //todo: method to populate recycler view
+//    private void populateRecyclerView() { // i think we will use this for toppings
+//
+//    }
 
+    private void returnToCreateOrder() {
+        Intent intent = new Intent(this, CreateOrderActivity.class);
+        startActivity(intent);
     }
 }

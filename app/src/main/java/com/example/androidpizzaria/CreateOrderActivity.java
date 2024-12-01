@@ -18,7 +18,7 @@ import pizzaria.Size;
 
 public class CreateOrderActivity extends AppCompatActivity{
     Singleton singleton = Singleton.getInstance();
-    private Button bt_addPizzas, bt_addOrder;
+    private Button bt_addPizzas, bt_addOrder, bt_createBackButton;
     private ListView lv_curOrder;
 
 
@@ -29,12 +29,20 @@ public class CreateOrderActivity extends AppCompatActivity{
         findID();
         initClickListeners();
         //initTempOrder(); // for testing - todo: delete later
-        populateCurrentOrder();
+        updateCurrentOrder();
+
+        //disable button if order is empty
+        if (singleton.getOrder().getPizzas().isEmpty()) {
+            bt_addOrder.setEnabled(false);
+        } else {
+            bt_addOrder.setEnabled(true);
+        }
     }
 
     private void findID() {
         bt_addPizzas = findViewById(R.id.bt_addPizzas);
         bt_addOrder = findViewById(R.id.bt_addOrder);
+        bt_createBackButton = findViewById(R.id.bt_createBackButton);
         lv_curOrder = findViewById(R.id.lv_curOrder);
     }
 
@@ -51,6 +59,13 @@ public class CreateOrderActivity extends AppCompatActivity{
             public void onClick(View v) {
                 onAddOrderClick();
                 updateListView();
+            }
+        });
+
+        bt_createBackButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                returnToMainMenu();
             }
         });
 
@@ -87,7 +102,7 @@ public class CreateOrderActivity extends AppCompatActivity{
 
     }
 
-    private void populateCurrentOrder(){
+    private void updateCurrentOrder(){
         ArrayAdapter<Pizza> dataAdapter = new ArrayAdapter<Pizza>(this,
                 android.R.layout.simple_selectable_list_item,
                 singleton.getOrder().getPizzas());
@@ -102,6 +117,11 @@ public class CreateOrderActivity extends AppCompatActivity{
 
         dataAdapter.notifyDataSetChanged();
         lv_curOrder.setAdapter(dataAdapter);
+    }
+
+    private void returnToMainMenu() {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 
     //todo: delete later
