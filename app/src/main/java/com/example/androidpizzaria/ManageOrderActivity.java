@@ -2,6 +2,7 @@ package com.example.androidpizzaria;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -100,9 +101,9 @@ public class ManageOrderActivity extends AppCompatActivity{
     //taken from p4 - todo: figure out how to fix this -> open failed: EROFS (Read-only file system)
     private void exportOrders() {
         try {
-            File output = new File("exported_orders.txt");
+            File output = new File(getFilesDir() + "/exported_orders.txt");
             if (output.exists()) {
-                System.exit(1);
+                //System.exit(1);
             }
             PrintWriter pw = new PrintWriter(output);
             for (Order order : singleton.getOrderList()) {
