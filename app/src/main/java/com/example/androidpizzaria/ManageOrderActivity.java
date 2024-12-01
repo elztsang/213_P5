@@ -1,5 +1,6 @@
 package com.example.androidpizzaria;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -22,7 +23,7 @@ import pizzaria.Size;
 
 public class ManageOrderActivity extends AppCompatActivity{
     Singleton singleton = Singleton.getInstance();
-    Button bt_removeOrder, bt_exportOrders;
+    Button bt_removeOrder, bt_exportOrders, bt_manageBackButton;
     Spinner sp_selectOrder;
     ListView lv_selectedOrder;
 
@@ -41,6 +42,7 @@ public class ManageOrderActivity extends AppCompatActivity{
     private void findID() {
         bt_removeOrder = findViewById(R.id.bt_removeOrder);
         bt_exportOrders = findViewById(R.id.bt_exportOrders);
+        bt_manageBackButton = findViewById(R.id.bt_manageBackButton);
         sp_selectOrder = findViewById(R.id.sp_selectOrder);
         lv_selectedOrder = findViewById(R.id.lv_selectedOrder);
     }
@@ -55,6 +57,7 @@ public class ManageOrderActivity extends AppCompatActivity{
                 updateSpinner();
             }
         });
+
         bt_exportOrders.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -62,14 +65,16 @@ public class ManageOrderActivity extends AppCompatActivity{
                 exportOrders();
             }
         });
+
+        bt_manageBackButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                returnToMainMenu();
+            }
+        });
     }
 
-    //idk if this is all i need lol
-    private void removeOrder(Order order) {
-        singleton.getOrderList().remove(order);
-    }
-
-    //taken from p4
+    //taken from p4 - todo: figure out how to fix this -> open failed: EROFS (Read-only file system)
     private void exportOrders() {
         try {
             File output = new File("exported_orders.txt");
@@ -104,6 +109,7 @@ public class ManageOrderActivity extends AppCompatActivity{
 
         lv_selectedOrder.setAdapter(dataAdapter);
 
+        //update listview on order selection
         sp_selectOrder.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
@@ -120,6 +126,11 @@ public class ManageOrderActivity extends AppCompatActivity{
             }
 
         });
+    }
+
+    private void returnToMainMenu() {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 
     //todo: delete later

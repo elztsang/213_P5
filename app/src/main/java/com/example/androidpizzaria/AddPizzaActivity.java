@@ -1,5 +1,6 @@
 package com.example.androidpizzaria;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -22,7 +23,7 @@ public class AddPizzaActivity extends AppCompatActivity{
 
 
     Singleton singleton = Singleton.getInstance();
-    Button bt_addPizza;
+    Button bt_addPizza, bt_addPizzaBack;
     RecyclerView rv_pizzaOptions;
     RadioButton rb_small, rb_medium, rb_large;
     RadioGroup rg_size;
@@ -47,6 +48,7 @@ public class AddPizzaActivity extends AppCompatActivity{
     private void findID() {
         //set all buttons n stuff here
         bt_addPizza = findViewById(R.id.bt_addPizza);
+        bt_addPizzaBack = findViewById(R.id.bt_addPizzaBack);
         rv_pizzaOptions = findViewById(R.id.rv_pizzaOptions);
         rg_size = findViewById(R.id.rg_size);
         rb_small = findViewById(R.id.rb_small);
@@ -60,6 +62,13 @@ public class AddPizzaActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 onAddPizzaClick();
+            }
+        });
+
+        bt_addPizzaBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                returnToCreateOrder();
             }
         });
     }
@@ -115,5 +124,10 @@ public class AddPizzaActivity extends AppCompatActivity{
     //todo: method to populate recycler view
     private void populateRecyclerView() {
 
+    }
+
+    private void returnToCreateOrder() {
+        Intent intent = new Intent(this, CreateOrderActivity.class);
+        startActivity(intent);
     }
 }
