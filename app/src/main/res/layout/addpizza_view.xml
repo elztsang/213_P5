@@ -12,6 +12,27 @@
         android:layout_height="375dp"
         tools:src="@tools:sample/avatars" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <ToggleButton
+            android:id="@+id/tb_chicago"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textOff="Chicago Style"
+            android:textOn="Chicago Style" />
+
+        <ToggleButton
+            android:id="@+id/tb_ny"
+            android:layout_width="215dp"
+            android:layout_height="wrap_content"
+            android:textOff="NY Style"
+            android:textOn="NY Style" />
+    </LinearLayout>
+
     <RadioGroup
         android:id="@+id/rg_size"
         android:layout_width="match_parent"
@@ -45,17 +66,15 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <Switch
-            android:id="@+id/sw_byo"
+        <Spinner
+            android:id="@+id/sp_pizzaOptions"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:text="Build Your Own?" />
+            android:layout_height="56dp" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_pizzaOptions"
+            android:id="@+id/rv_toppingOptions"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
-    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -76,4 +95,12 @@
             android:layout_weight=".5"
             android:text="Add Pizza" />
     </LinearLayout>
+        <Button
+            android:id="@+id/bt_addPizza"
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:text="Add Pizza" />
+
+    </LinearLayout>
+
 </LinearLayout>
