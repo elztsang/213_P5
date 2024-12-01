@@ -28,15 +28,11 @@ public class CreateOrderActivity extends AppCompatActivity{
         setContentView(R.layout.createorder_view);
         findID();
         initClickListeners();
-        //initTempOrder(); // for testing - todo: delete later
+        initTempOrder(); // for testing - todo: delete later
         updateCurrentOrder();
 
         //disable button if order is empty
-        if (singleton.getOrder().getPizzas().isEmpty()) {
-            bt_addOrder.setEnabled(false);
-        } else {
-            bt_addOrder.setEnabled(true);
-        }
+        toggleAddOrderWhenValid();
     }
 
     private void findID() {
@@ -59,6 +55,7 @@ public class CreateOrderActivity extends AppCompatActivity{
             public void onClick(View v) {
                 onAddOrderClick();
                 updateListView();
+                toggleAddOrderWhenValid();
             }
         });
 
@@ -78,6 +75,14 @@ public class CreateOrderActivity extends AppCompatActivity{
                 updateListView();
             }
         });
+    }
+
+    private void toggleAddOrderWhenValid() {
+        if (singleton.getOrder().getPizzas().isEmpty()) {
+            bt_addOrder.setEnabled(false);
+        } else {
+            bt_addOrder.setEnabled(true);
+        }
     }
 
     //maybe rename this button and method to be a bit less confusing

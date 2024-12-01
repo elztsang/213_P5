@@ -14,6 +14,7 @@ public class Singleton {
     private PizzaFactory pizzaFactory;
     private Order order;
     private ArrayList<Order> orderList;
+    private int orderCounter;
 
     private Singleton() {
         orderList = new ArrayList<>();
@@ -50,5 +51,13 @@ public class Singleton {
 
     public void setPizza(Pizza pizza) {
         this.pizza = pizza;
+    }
+
+    public int getOrderCounter() {
+        return this.orderCounter;
+    }
+
+    public void setOrderCounter(int i) {
+        this.orderCounter = i;
     }
 }

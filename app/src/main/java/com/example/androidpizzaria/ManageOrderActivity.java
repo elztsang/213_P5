@@ -37,6 +37,7 @@ public class ManageOrderActivity extends AppCompatActivity{
         setTestOrderList(); //for testing todo: delete later
         updateSpinner();
         populateListView();
+        toggleRemoveOrderIfEmpty();
     }
 
     private void findID() {
@@ -53,8 +54,9 @@ public class ManageOrderActivity extends AppCompatActivity{
             public void onClick(View v) {
                 Order selectedOrder = (Order) sp_selectOrder.getSelectedItem();
                 singleton.getOrderList().remove(selectedOrder);
-
                 updateSpinner();
+                toggleRemoveOrderIfEmpty();
+                clearLVIfEmpty();
             }
         });
 
@@ -72,6 +74,27 @@ public class ManageOrderActivity extends AppCompatActivity{
                 returnToMainMenu();
             }
         });
+    }
+
+    private void toggleRemoveOrderIfEmpty() {
+        if (singleton.getOrderList().isEmpty()) {
+            bt_removeOrder.setEnabled(false);
+        } else {
+            bt_removeOrder.setEnabled(true);
+        }
+    }
+
+    private void clearLVIfEmpty() {
+        ArrayAdapter<Pizza> dataAdapter = new ArrayAdapter<Pizza>(this,
+                android.R.layout.simple_list_item_1,
+                singleton.getOrder().getPizzas());
+
+        if (singleton.getOrderList().isEmpty()) {
+            dataAdapter.clear();
+            dataAdapter.notifyDataSetChanged();
+            lv_selectedOrder.setAdapter(dataAdapter);
+
+        }
     }
 
     //taken from p4 - todo: figure out how to fix this -> open failed: EROFS (Read-only file system)
@@ -122,9 +145,10 @@ public class ManageOrderActivity extends AppCompatActivity{
 
             @Override
             public void onNothingSelected(AdapterView<?> parentView) {
+                dataAdapter.clear();
+                dataAdapter.notifyDataSetChanged();
                 System.out.println("some error");
             }
-
         });
     }
 
