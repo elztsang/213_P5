@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">Android Pizzaria</string>
+    <string name="add_pizza_success">Added pizza to order!</string>
+    <string name="add_order_success">Successfully added order!</string>
+    <string name="add_order_error">Unable to add order!</string>
+    <string name="add_pizza_error">Unable to add pizza!</string>
+    <string name="remove_pizza_error">Unable to add pizza!</string>
+    <string name="remove_order_error">Failed to remove order!</string>
+    <string name="export_order_error">Failed to export orders!</string>
+    <string name="select_size_notif">Please select a size!</string>
+    <string name="select_type_notif">Please select a pizza type!</string>
+    <string name="select_style_notif">Please choose a pizza style!</string>
 </resources>

@@ -116,9 +116,9 @@ public class AddPizzaActivity extends AppCompatActivity implements AdapterView.O
                 } else if (checkedId == rb_large.getId()) {
                     selectedSize = Size.LARGE;
                 } else {
-                    //TODO: make this a popup instead (forgot the name of it)
-                    Toast.makeText(getApplicationContext(), "Please select a size", Toast.LENGTH_SHORT).show();
-                    //System.out.println("please select a size");
+                    Toast.makeText(getApplicationContext(),
+                            getString(R.string.select_size_notif),
+                            Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -155,9 +155,14 @@ public class AddPizzaActivity extends AppCompatActivity implements AdapterView.O
             //getRVSelection();
             singleton.getPizza().setSize(selectedSize);
             singleton.getPizzaList().add(singleton.getPizza());
+            Toast.makeText(getApplicationContext(),
+                    getString(R.string.add_pizza_success),
+                    Toast.LENGTH_SHORT).show();
         } else {
             //display error somewhere else
-            Toast.makeText(getApplicationContext(), "Unable to add pizza!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(),
+                    getString(R.string.add_pizza_error),
+                    Toast.LENGTH_SHORT).show();
             //System.out.println("unable to add pizza");
         }
     }

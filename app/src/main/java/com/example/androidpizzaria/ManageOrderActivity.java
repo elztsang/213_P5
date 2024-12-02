@@ -54,11 +54,12 @@ public class ManageOrderActivity extends AppCompatActivity{
         bt_removeOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Order selectedOrder = (Order) sp_selectOrder.getSelectedItem();
-                singleton.getOrderList().remove(selectedOrder);
-                updateSpinner();
-                toggleRemoveOrderIfEmpty();
-                clearLVIfEmpty();
+                try {
+                    onRemoveOrder();
+                } catch (Exception e) {
+                    displayRemoveErrorToast();
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -86,6 +87,20 @@ public class ManageOrderActivity extends AppCompatActivity{
         }
     }
 
+    private void onRemoveOrder() {
+        Order selectedOrder = (Order) sp_selectOrder.getSelectedItem();
+        singleton.getOrderList().remove(selectedOrder);
+        updateSpinner();
+        toggleRemoveOrderIfEmpty();
+        clearLVIfEmpty();
+    }
+
+    private void displayRemoveErrorToast() {
+        Toast.makeText(getApplicationContext(),
+                getString(R.string.remove_order_error),
+                Toast.LENGTH_SHORT).show();
+    }
+
     private void clearLVIfEmpty() {
         ArrayAdapter<Pizza> dataAdapter = new ArrayAdapter<Pizza>(this,
                 android.R.layout.simple_list_item_1,
@@ -99,7 +114,6 @@ public class ManageOrderActivity extends AppCompatActivity{
         }
     }
 
-    //taken from p4 - todo: figure out how to fix this -> open failed: EROFS (Read-only file system)
     private void exportOrders() {
         try {
             File output = new File(getFilesDir() + "/exported_orders.txt");
@@ -112,9 +126,9 @@ public class ManageOrderActivity extends AppCompatActivity{
             }
             pw.close();
         } catch (IOException e) {
-            //todo: change the print statement to toast
-            Toast.makeText(getApplicationContext(), "An error occurred during export.", Toast.LENGTH_SHORT).show();
-            System.out.println("An error occurred.");
+            Toast.makeText(getApplicationContext(),
+                    getString(R.string.export_order_error),
+                    Toast.LENGTH_SHORT).show();
             e.printStackTrace();
         }
     }

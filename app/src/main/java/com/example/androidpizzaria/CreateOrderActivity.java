@@ -29,6 +29,7 @@ public class CreateOrderActivity extends AppCompatActivity{
         setContentView(R.layout.createorder_view);
         findID();
         initClickListeners();
+        initLVClickListener();
         initTempOrder(); // for testing - todo: delete later
         updateCurrentOrder();
 
@@ -66,18 +67,24 @@ public class CreateOrderActivity extends AppCompatActivity{
                 returnToMainMenu();
             }
         });
+    }
 
+    private void initLVClickListener() {
         lv_curOrder.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Pizza selectedPizza = (Pizza) parent.getItemAtPosition(position);
-                singleton.getOrder().getPizzas().remove(selectedPizza);
-
-                updateListView();
+                try { //remove pizza on click
+                    Pizza selectedPizza = (Pizza) parent.getItemAtPosition(position);
+                    singleton.getOrder().getPizzas().remove(selectedPizza);
+                    updateListView();
+                } catch (Exception e) {
+                    Toast.makeText(getApplicationContext(),
+                            getString(R.string.remove_pizza_error),
+                            Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
-
     private void toggleAddOrderWhenValid() {
         if (singleton.getOrder().getPizzas().isEmpty()) {
             bt_addOrder.setEnabled(false);
@@ -98,14 +105,15 @@ public class CreateOrderActivity extends AppCompatActivity{
         if (singleton.getOrder() != null) {
             //todo: set order pizzalist(?)
             singleton.getOrderList().add(singleton.getOrder());
-            //todo: temp debugging print - replace with a toast or smth
-            Toast.makeText(getApplicationContext(), "Successfully added order!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(),
+                    getString(R.string.add_order_success),
+                    Toast.LENGTH_SHORT).show();
             //System.out.println("added order: " + singleton.getOrder());
             singleton.setOrder(new Order());
         } else {
-            //display error somewhere else
-            Toast.makeText(getApplicationContext(), "Unable to add order!", Toast.LENGTH_SHORT).show();
-            //System.out.println("unable to add order");
+            Toast.makeText(getApplicationContext(),
+                    getString(R.string.add_order_error),
+                    Toast.LENGTH_SHORT).show();
         }
 
     }
