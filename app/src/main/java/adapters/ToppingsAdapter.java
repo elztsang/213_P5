@@ -34,10 +34,13 @@ class ToppingsAdapter extends RecyclerView.Adapter<ToppingsAdapter.ToppingsHolde
 
     private final ArrayList<Topping> selectedToppings = new ArrayList<>();
 
-    public ToppingsAdapter(Context context, ArrayList<Topping> toppings, ArrayList<Topping> preselectedToppings) { //TODO: add a parameter for preselected toppings?
+    private final boolean isSelectionEnabled;  // Flag to control selection
+
+    public ToppingsAdapter(Context context, ArrayList<Topping> toppings, ArrayList<Topping> preselectedToppings, boolean isSelectionEnabled) { //TODO: add a parameter for preselected toppings?
         this.context = context;
         this.toppings = toppings;
         selectedToppings.addAll(preselectedToppings);
+        this.isSelectionEnabled = isSelectionEnabled;  // Store the flag
     }
 
     /**
@@ -66,6 +69,9 @@ class ToppingsAdapter extends RecyclerView.Adapter<ToppingsAdapter.ToppingsHolde
         Topping topping = toppings.get(position);
 
         holder.textView.setText(topping.name());
+
+        holder.checkBox.setEnabled(isSelectionEnabled);  // If false, checkbox won't be interactive
+
         holder.checkBox.setChecked(selectedToppings.contains(topping));
         holder.checkBox.setEnabled(selectedToppings.contains(topping) || selectedToppings.size() < MAX_SELECTION);
 
