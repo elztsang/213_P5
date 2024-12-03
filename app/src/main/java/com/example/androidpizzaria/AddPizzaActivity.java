@@ -27,6 +27,8 @@ public class AddPizzaActivity extends AppCompatActivity implements AdapterView.O
 //    private static final int RBLARGE = R.id.rb_large;
 
     Singleton singleton = Singleton.getInstance();
+    ToppingsAdapter toppingsAdapter;
+
     Button bt_addPizza, bt_addPizzaBack;
     RecyclerView rv_toppingOptions;
     RadioButton rb_small, rb_medium, rb_large;
@@ -42,6 +44,7 @@ public class AddPizzaActivity extends AppCompatActivity implements AdapterView.O
 //    private Pizza currentPizza;
     private boolean isBYO; //use this to make the recyclerview selectable (isBYO = true)/unselectable (isBYO = false)
     ObservableArrayList<Topping> toppingOptions; //might not need
+//    private ArrayList<Topping> toppingOptions = Topping.values();
     //might need another array for "selected toppings"; premade pizzas will set this automatically, byo will get to choose
 
     //TODO: set up lists of "premade" toppings to assign to recycler view
@@ -60,7 +63,8 @@ public class AddPizzaActivity extends AppCompatActivity implements AdapterView.O
         //initPizzaOptionListener(); //listener for non-byo
         initSpinner();
         sp_pizzaOptions.setOnItemClickListener(this); //not sure if should follow thru with recommended change?
-        // TODO: add listener for pizza style (spinner dropdown menu)
+//        ToppingsAdapter toppingsAdapter = new ToppingsAdapter(this, toppingOptions);
+//        rv_toppingOptions.setAdapter(new );
     }
 
     private void initToppingOptions() {
