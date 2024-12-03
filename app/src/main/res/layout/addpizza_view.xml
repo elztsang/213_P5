@@ -9,7 +9,8 @@
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="match_parent"
-        android:layout_height="375dp"
+        android:layout_height="278dp"
+        android:contentDescription="pizzaView"
         tools:src="@tools:sample/avatars" />
 
     <LinearLayout
@@ -19,7 +20,7 @@
 
         <ToggleButton
             android:id="@+id/tb_chicago"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textOff="Chicago Style"
@@ -63,44 +64,41 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="381dp"
         android:orientation="vertical">
 
         <Spinner
             android:id="@+id/sp_pizzaOptions"
             android:layout_width="match_parent"
-            android:layout_height="56dp" />
+            android:layout_height="69dp" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_toppingOptions"
             android:layout_width="match_parent"
-            android:layout_height="100dp" />
+            android:layout_height="240dp" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/bt_addPizzaBack"
+        <LinearLayout
+            style="?android:attr/buttonBarStyle"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight=".5"
-            android:text="Go Back" />
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/bt_addPizza"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight=".5"
-            android:text="Add Pizza" />
-    </LinearLayout>
+            <Button
+                android:id="@+id/bt_addPizzaBack"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight=".5"
+                android:text="Go Back" />
 
-        <Button
-            android:id="@+id/bt_addPizza"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:text="Add Pizza" />
+            <Button
+                android:id="@+id/bt_addPizza"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight=".5"
+                android:text="Add Pizza" />
+        </LinearLayout>
 
     </LinearLayout>
 
