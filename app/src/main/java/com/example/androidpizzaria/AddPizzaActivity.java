@@ -3,17 +3,7 @@ package com.example.androidpizzaria;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.CompoundButton;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.Spinner;
-import android.widget.Switch;
-import android.widget.ListView;
-import android.widget.Toast;
-import android.widget.ToggleButton;
+import android.widget.*;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
@@ -45,6 +35,7 @@ public class AddPizzaActivity extends AppCompatActivity implements AdapterView.O
     Spinner sp_pizzaOptions;
     ToggleButton tb_chicago;
     ToggleButton tb_ny;
+    ImageView pizzaView;
 
     private Size selectedSize;
     private PizzaFactory pizzaStyle;
@@ -68,7 +59,7 @@ public class AddPizzaActivity extends AppCompatActivity implements AdapterView.O
         initSizeListener();
         //initPizzaOptionListener(); //listener for non-byo
         initSpinner();
-        sp_pizzaOptions.setOnItemClickListener(this);
+        sp_pizzaOptions.setOnItemClickListener(this); //not sure if should follow thru with recommended change?
         // TODO: add listener for pizza style (spinner dropdown menu)
     }
 
@@ -90,6 +81,7 @@ public class AddPizzaActivity extends AppCompatActivity implements AdapterView.O
         sp_pizzaOptions = findViewById(R.id.sp_pizzaOptions);
         tb_chicago = findViewById(R.id.tb_chicago);
         tb_ny = findViewById(R.id.tb_ny);
+        pizzaView = findViewById((R.id.pizzaView));
     }
 
     private void initClickListeners() {
