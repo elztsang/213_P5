@@ -1,5 +1,7 @@
 package com.example.androidpizzaria;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
@@ -25,7 +27,7 @@ import pizzaria.Size;
 
 public class ManageOrderActivity extends AppCompatActivity{
     Singleton singleton = Singleton.getInstance();
-    Button bt_removeOrder, bt_exportOrders, bt_manageBackButton;
+    Button bt_removeOrder, bt_manageBackButton;
     Spinner sp_selectOrder;
     ListView lv_selectedOrder;
 
@@ -36,7 +38,7 @@ public class ManageOrderActivity extends AppCompatActivity{
         setContentView(R.layout.manageorder_view);
         findID();
         initClickListeners();
-        setTestOrderList(); //for testing todo: delete later
+        createTestOrderList(); //for testing todo: delete later
         updateSpinner();
         populateListView();
         toggleRemoveOrderIfEmpty();
@@ -44,7 +46,6 @@ public class ManageOrderActivity extends AppCompatActivity{
 
     private void findID() {
         bt_removeOrder = findViewById(R.id.bt_removeOrder);
-        bt_exportOrders = findViewById(R.id.bt_exportOrders);
         bt_manageBackButton = findViewById(R.id.bt_manageBackButton);
         sp_selectOrder = findViewById(R.id.sp_selectOrder);
         lv_selectedOrder = findViewById(R.id.lv_selectedOrder);
@@ -60,14 +61,6 @@ public class ManageOrderActivity extends AppCompatActivity{
                     displayRemoveErrorToast();
                     e.printStackTrace();
                 }
-            }
-        });
-
-        bt_exportOrders.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //addOrderTEMP(); //for testing - todo: delete later
-                exportOrders();
             }
         });
 
@@ -89,8 +82,7 @@ public class ManageOrderActivity extends AppCompatActivity{
 
     private void onRemoveOrder() {
         Order selectedOrder = (Order) sp_selectOrder.getSelectedItem();
-        singleton.getOrderList().remove(selectedOrder);
-        updateSpinner();
+        createRemoveOrderAlertDialog(selectedOrder);
         toggleRemoveOrderIfEmpty();
         clearLVIfEmpty();
     }
@@ -111,25 +103,6 @@ public class ManageOrderActivity extends AppCompatActivity{
             dataAdapter.notifyDataSetChanged();
             lv_selectedOrder.setAdapter(dataAdapter);
 
-        }
-    }
-
-    private void exportOrders() {
-        try {
-            File output = new File(getFilesDir() + "/exported_orders.txt");
-            if (output.exists()) {
-                //System.exit(1);
-            }
-            PrintWriter pw = new PrintWriter(output);
-            for (Order order : singleton.getOrderList()) {
-                pw.println(order);
-            }
-            pw.close();
-        } catch (IOException e) {
-            Toast.makeText(getApplicationContext(),
-                    getString(R.string.export_order_error),
-                    Toast.LENGTH_SHORT).show();
-            e.printStackTrace();
         }
     }
 
@@ -176,8 +149,27 @@ public class ManageOrderActivity extends AppCompatActivity{
         startActivity(intent);
     }
 
+    private void createRemoveOrderAlertDialog(Order selectedOrder) {
+        AlertDialog.Builder alert = new AlertDialog.Builder(ManageOrderActivity.this);
+        alert.setMessage(getString(R.string.order_remove_alert));
+        alert.setTitle(getString(R.string.alert_title));
+        alert.setCancelable(false);
+
+        alert.setPositiveButton("Yes", (DialogInterface.OnClickListener) (dialog, which) -> {
+            singleton.getOrderList().remove(selectedOrder);
+            updateSpinner();
+        });
+
+        alert.setNegativeButton("No", (DialogInterface.OnClickListener) (dialog, which) -> {
+            dialog.cancel();
+        });
+
+        AlertDialog alertDialog = alert.create();
+        alertDialog.show();
+    }
+
     //todo: delete later
-    private void setTestOrderList() {
+    private void createTestOrderList() {
         PizzaFactory pf = new ChicagoPizza();
         Pizza tp = pf.createMeatzza();
         tp.setSize(Size.SMALL);

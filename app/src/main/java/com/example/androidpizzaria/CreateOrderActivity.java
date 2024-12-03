@@ -1,5 +1,7 @@
 package com.example.androidpizzaria;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -30,7 +32,7 @@ public class CreateOrderActivity extends AppCompatActivity{
         findID();
         initClickListeners();
         initLVClickListener();
-        //initTempOrder(); // for testing - todo: delete later
+        initTempOrder(); // for testing - todo: delete later
         updateCurrentOrder();
 
         //disable button if order is empty
@@ -75,8 +77,7 @@ public class CreateOrderActivity extends AppCompatActivity{
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 try { //remove pizza on click
                     Pizza selectedPizza = (Pizza) parent.getItemAtPosition(position);
-                    singleton.getOrder().getPizzas().remove(selectedPizza);
-                    updateListView();
+                    createRemovePizzaAlertDialog(selectedPizza);
                 } catch (Exception e) {
                     Toast.makeText(getApplicationContext(),
                             getString(R.string.remove_pizza_error),
@@ -137,6 +138,25 @@ public class CreateOrderActivity extends AppCompatActivity{
     private void returnToMainMenu() {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
+    }
+
+    private void createRemovePizzaAlertDialog(Pizza selectedPizza) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(CreateOrderActivity.this);
+        builder.setMessage(getString(R.string.pizza_remove_alert));
+        builder.setTitle(getString(R.string.alert_title));
+        builder.setCancelable(false);
+
+        builder.setPositiveButton("Yes", (DialogInterface.OnClickListener) (dialog, which) -> {
+            singleton.getOrder().getPizzas().remove(selectedPizza);
+            updateListView();
+        });
+
+        builder.setNegativeButton("No", (DialogInterface.OnClickListener) (dialog, which) -> {
+            dialog.cancel();
+        });
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 
     //todo: delete later

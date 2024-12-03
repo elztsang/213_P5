@@ -174,10 +174,10 @@ public class AddPizzaActivity extends AppCompatActivity implements AdapterView.O
         //not sure if this method is needed yet, need to look more into adapter capabilities -elz
     }
 
-    @Override
     /**
      * The event handler implemented for "this" object
      */
+    @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         Pizza selectedPizzaType = (Pizza) sp_pizzaOptions.getSelectedItem(); //get the selected item
     }

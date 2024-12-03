@@ -10,4 +10,7 @@
     <string name="select_size_notif">Please select a size!</string>
     <string name="select_type_notif">Please select a pizza type!</string>
     <string name="select_style_notif">Please choose a pizza style!</string>
+    <string name="alert_title">Alert!</string>
+    <string name="pizza_remove_alert">Are you sure you want to remove this pizza?</string>
+    <string name="order_remove_alert">Are you sure you want to remove this order?</string>
 </resources>
