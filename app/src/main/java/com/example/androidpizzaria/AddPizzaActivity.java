@@ -78,14 +78,15 @@ public class AddPizzaActivity extends AppCompatActivity implements AdapterView.O
         //set all buttons n stuff here
         bt_addPizza = findViewById(R.id.bt_addPizza);
         bt_addPizzaBack = findViewById(R.id.bt_addPizzaBack);
-        rv_toppingOptions = rv_toppingOptions.findViewById(R.id.rv_toppingOptions);
-        rg_size = rg_size.findViewById(R.id.rg_size);
-        rb_small = rb_small.findViewById(R.id.rb_small);
-        rb_medium = rb_medium.findViewById(R.id.rb_medium);
-        rb_large = rb_large.findViewById(R.id.rb_large);
-        sp_pizzaOptions = sp_pizzaOptions.findViewById(R.id.sp_pizzaOptions);
-        tb_chicago = tb_chicago.findViewById(R.id.tb_chicago);
-        tb_ny = tb_chicago.findViewById(R.id.tb_ny);
+        //System.out.println(findViewById(R.id.rv_toppingOptions));
+        rv_toppingOptions = findViewById(R.id.rv_toppingOptions);
+        rg_size = findViewById(R.id.rg_size);
+        rb_small = findViewById(R.id.rb_small);
+        rb_medium = findViewById(R.id.rb_medium);
+        rb_large = findViewById(R.id.rb_large);
+        sp_pizzaOptions = findViewById(R.id.sp_pizzaOptions);
+        tb_chicago = findViewById(R.id.tb_chicago);
+        tb_ny = findViewById(R.id.tb_ny);
     }
 
     private void initClickListeners() {

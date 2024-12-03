@@ -30,7 +30,7 @@ public class CreateOrderActivity extends AppCompatActivity{
         findID();
         initClickListeners();
         initLVClickListener();
-        initTempOrder(); // for testing - todo: delete later
+        //initTempOrder(); // for testing - todo: delete later
         updateCurrentOrder();
 
         //disable button if order is empty
@@ -108,7 +108,6 @@ public class CreateOrderActivity extends AppCompatActivity{
             Toast.makeText(getApplicationContext(),
                     getString(R.string.add_order_success),
                     Toast.LENGTH_SHORT).show();
-            //System.out.println("added order: " + singleton.getOrder());
             singleton.setOrder(new Order());
         } else {
             Toast.makeText(getApplicationContext(),
