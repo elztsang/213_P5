@@ -1,5 +1,7 @@
 package com.example.androidpizzaria;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -57,21 +59,20 @@ public class AddPizzaActivity extends AppCompatActivity implements AdapterView.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.addpizza_view);
         findID();
+        initClickListeners();
+        initToggleListener();
+        initSizeListener();
+        //initPizzaOptionListener(); //listener for non-byo
+        initSpinner();
+        sp_pizzaOptions.setOnItemSelectedListener(this);
+        //set a default pizza factory for now
+        singleton.setPizzaFactory(new ChicagoPizza());
         initToppingOptions();
         //initialize the toppings list, preselected is empty on start
         isBYO = false;
         toppingsAdapter = new ToppingsAdapter(this, toppingOptions, new ArrayList<>(), isBYO);
         rv_toppingOptions.setAdapter(toppingsAdapter);
         rv_toppingOptions.setLayoutManager(new LinearLayoutManager(this));
-
-        initClickListeners();
-        initToggleListener();
-        initSizeListener();
-        //initPizzaOptionListener(); //listener for non-byo
-        initSpinner();
-        sp_pizzaOptions.setOnItemSelectedListener(this); //not sure if should follow thru with recommended change?
-//        ToppingsAdapter toppingsAdapter = new ToppingsAdapter(this, toppingOptions);
-//        rv_toppingOptions.setAdapter(new );
     }
 
     private void initToppingOptions() {
@@ -132,14 +133,14 @@ public class AddPizzaActivity extends AppCompatActivity implements AdapterView.O
         tb_chicago.setOnClickListener(v -> {
             if (tb_chicago.isChecked()) {
                 tb_ny.setChecked(false);
-//                sp_pizzaOptions.setAdapter(chicagoPizzasAdapter); //not sure if this will work atm
+                singleton.setPizzaFactory(new ChicagoPizza());
             }
         });
 
         tb_ny.setOnClickListener(v -> {
             if (tb_ny.isChecked()) {
                 tb_chicago.setChecked(false);
-//                sp_pizzaOptions.setAdapter(nyPizzasAdapter);
+                singleton.setPizzaFactory(new NYPizza());
             }
         });
     }
@@ -176,37 +177,43 @@ public class AddPizzaActivity extends AppCompatActivity implements AdapterView.O
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 //        Pizza selectedPizzaType = (Pizza) sp_pizzaOptions.getSelectedItem(); //get the selected item
         String selectedItem = sp_pizzaOptions.getSelectedItem().toString(); //get the selected item
-
-        PizzaFactory pizzaFactory = null;
-        if(tb_chicago.isSelected()){
-             pizzaFactory = new ChicagoPizza();
-        }
-        if (tb_ny.isSelected()){
-            pizzaFactory = new NYPizza();
-        }
-
         isBYO = false;
 
-        if(pizzaFactory != null){
-            switch(selectedItem){
-                case("Deluxe"):
-                    singleton.setPizza(pizzaFactory.createDeluxe());
-                    break;
-                case("BBQ Chicken"):
-                    singleton.setPizza(pizzaFactory.createBBQChicken());
-                    break;
-                case("Meatzza"):
-                    singleton.setPizza(pizzaFactory.createMeatzza());
-                    break;
-                case("BYO"):
-                    singleton.setPizza(pizzaFactory.createBuildYourOwn());
-                    isBYO = true; //update toppings list here? TODO: need to figure out adapter implementation with controller
-                    break;
-            }
+        if(singleton.getPizzaFactory() != null){
+            if (selectedSize != null) {
+                singleton.getPizza().setSize(selectedSize);
+                switch(selectedItem){
+                    case("Deluxe"):
+                        singleton.setPizza(singleton.getPizzaFactory().createDeluxe());
+                        singleton.getPizza().setSize(selectedSize); //temp todo: delete
+                        System.out.println(singleton.getPizza());
+                        break;
+                    case("BBQ Chicken"):
+                        singleton.setPizza(singleton.getPizzaFactory().createBBQChicken());
+                        singleton.getPizza().setSize(selectedSize); //temp todo: delete
+                        System.out.println(singleton.getPizza());
+                        break;
+                    case("Meatzza"):
+                        singleton.setPizza(singleton.getPizzaFactory().createMeatzza());
+                        singleton.getPizza().setSize(selectedSize); //temp todo: delete
+                        System.out.println(singleton.getPizza());
+                        break;
+                    case("BYO"):
+                        singleton.setPizza(singleton.getPizzaFactory().createBuildYourOwn());
+                        singleton.getPizza().setSize(selectedSize); //temp todo: delete
+                        isBYO = true; //update toppings list here? TODO: need to figure out adapter implementation with controller
+                        break;
+                }
 
-            toppingsAdapter.setSelectedToppings(singleton.getPizza().getToppings());
-            toppingsAdapter.setSelectionEnabled(isBYO);
+                toppingsAdapter.setSelectedToppings(singleton.getPizza().getToppings());
+                toppingsAdapter.setSelectionEnabled(isBYO);
 //            toppingsAdapter.notifyDataSetChanged();
+            } else {
+                //todo: create a toast or alert dialog
+                Toast.makeText(getApplicationContext(),
+                        getString(R.string.select_size_notif),
+                        Toast.LENGTH_SHORT).show();
+            }
         }
     }
 

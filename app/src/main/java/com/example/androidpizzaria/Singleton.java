@@ -60,4 +60,12 @@ public class Singleton {
     public void setOrderCounter(int i) {
         this.orderCounter = i;
     }
+
+    public PizzaFactory getPizzaFactory() {
+        return this.pizzaFactory;
+    }
+
+    public void setPizzaFactory(PizzaFactory pizzaFactory) {
+        this.pizzaFactory = pizzaFactory;
+    }
 }
