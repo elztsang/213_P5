@@ -33,15 +33,23 @@ class ToppingsAdapter extends RecyclerView.Adapter<ToppingsAdapter.ToppingsHolde
     private Context context; //need the context to inflate the layout
     private ArrayList<Topping> toppings; //need the data binding to each row of RecyclerView
 
-    private final ArrayList<Topping> selectedToppings = new ArrayList<>();
+    private ArrayList<Topping> selectedToppings = new ArrayList<>();
 
-    private final boolean isSelectionEnabled;  // Flag to control selection
+    private boolean isSelectionEnabled;  // Flag to control selection
 
     public ToppingsAdapter(Context context, ArrayList<Topping> toppings, ArrayList<Topping> preselectedToppings, boolean isSelectionEnabled) { //TODO: add a parameter for preselected toppings?
         this.context = context;
         this.toppings = toppings;
         selectedToppings.addAll(preselectedToppings);
         this.isSelectionEnabled = isSelectionEnabled;  // Store the flag
+    }
+
+    public void setSelectedToppings(ArrayList<Topping> selectedToppings) {
+        this.selectedToppings = selectedToppings;
+    }
+
+    public void setSelectionEnabled(boolean selectionEnabled) {
+        isSelectionEnabled = selectionEnabled;
     }
 
     /**
@@ -69,7 +77,7 @@ class ToppingsAdapter extends RecyclerView.Adapter<ToppingsAdapter.ToppingsHolde
     public void onBindViewHolder(@NonNull ToppingsHolder holder, int position) {
         Topping topping = toppings.get(position);
 
-        holder.textView.setText(topping.name());
+        holder.textView.setText(toppings.get(position).name());
 //        holder.imageView.setImageResource(toppings.get(position).getImage()); //need to resolve this
 
         holder.checkBox.setEnabled(isSelectionEnabled);  // If false, checkbox won't be interactive

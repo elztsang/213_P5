@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.*;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.databinding.ObservableArrayList;
 
@@ -58,8 +59,11 @@ public class AddPizzaActivity extends AppCompatActivity implements AdapterView.O
         findID();
         initToppingOptions();
         //initialize the toppings list, preselected is empty on start
-        toppingsAdapter = new ToppingsAdapter(this, toppingOptions, new ArrayList<>(), false);
+        isBYO = false;
+        toppingsAdapter = new ToppingsAdapter(this, toppingOptions, new ArrayList<>(), isBYO);
         rv_toppingOptions.setAdapter(toppingsAdapter);
+        rv_toppingOptions.setLayoutManager(new LinearLayoutManager(this));
+
         initClickListeners();
         initToggleListener();
         initSizeListener();
@@ -103,6 +107,7 @@ public class AddPizzaActivity extends AppCompatActivity implements AdapterView.O
         String[] pizzaStyles = {"Deluxe", "BBQ Chicken", "Meatzza", "BYO"}; //TODO: populate with (default) pizzas using pizza factory
 
         pizzasAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, pizzaStyles);
+        sp_pizzaOptions.setAdapter(pizzasAdapter);
     }
 
     private void initSizeListener() {
@@ -180,6 +185,8 @@ public class AddPizzaActivity extends AppCompatActivity implements AdapterView.O
             pizzaFactory = new NYPizza();
         }
 
+        isBYO = false;
+
         if(pizzaFactory != null){
             switch(selectedItem){
                 case("Deluxe"):
@@ -196,6 +203,10 @@ public class AddPizzaActivity extends AppCompatActivity implements AdapterView.O
                     isBYO = true; //update toppings list here? TODO: need to figure out adapter implementation with controller
                     break;
             }
+
+            toppingsAdapter.setSelectedToppings(singleton.getPizza().getToppings());
+            toppingsAdapter.setSelectionEnabled(isBYO);
+//            toppingsAdapter.notifyDataSetChanged();
         }
     }
 
