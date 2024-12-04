@@ -73,4 +73,9 @@ public class BuildYourOwn extends Pizza{
         toppings.addAll(toppingsList);
         super.setToppings(toppings);
     }
+
+    public void addTopping(Topping topping){
+        toppings.add(topping);
+        super.setToppings(toppings);
+    }
 }

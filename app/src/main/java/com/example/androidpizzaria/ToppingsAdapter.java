@@ -84,15 +84,16 @@ class ToppingsAdapter extends RecyclerView.Adapter<ToppingsAdapter.ToppingsHolde
 
         holder.checkBox.setChecked(selectedToppings.contains(topping));
 
-        //todo: need to check this
-        holder.checkBox.setEnabled(selectedToppings.contains(topping) || selectedToppings.size() < MAX_SELECTION);
+        //seems to work
+        holder.checkBox.setEnabled(selectedToppings.contains(topping) || (isSelectionEnabled && selectedToppings.size() < MAX_SELECTION));
 
+        //TODO: refactor stuff; should BYO and premades be separate cases?
         holder.itemView.setOnClickListener(v -> {
             if (holder.checkBox.isEnabled()) {
                 if (holder.checkBox.isChecked()) {
                     selectedToppings.remove(topping);
                 } else {
-                    if (selectedToppings.size() < MAX_SELECTION) {
+                    if (isSelectionEnabled && selectedToppings.size() < MAX_SELECTION) {
                         selectedToppings.add(topping);
                     }
                 }
