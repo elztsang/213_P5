@@ -1,17 +1,16 @@
-package adapters;
+package com.example.androidpizzaria;
 
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 //import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.example.androidpizzaria.R;
 
 import java.util.ArrayList;
 
@@ -71,10 +70,13 @@ class ToppingsAdapter extends RecyclerView.Adapter<ToppingsAdapter.ToppingsHolde
         Topping topping = toppings.get(position);
 
         holder.textView.setText(topping.name());
+//        holder.imageView.setImageResource(toppings.get(position).getImage()); //need to resolve this
 
         holder.checkBox.setEnabled(isSelectionEnabled);  // If false, checkbox won't be interactive
 
         holder.checkBox.setChecked(selectedToppings.contains(topping));
+
+        //todo: need to check this
         holder.checkBox.setEnabled(selectedToppings.contains(topping) || selectedToppings.size() < MAX_SELECTION);
 
         holder.itemView.setOnClickListener(v -> {
@@ -106,6 +108,7 @@ class ToppingsAdapter extends RecyclerView.Adapter<ToppingsAdapter.ToppingsHolde
     public static class ToppingsHolder extends RecyclerView.ViewHolder {
         TextView textView;
         CheckBox checkBox;
+        ImageView imageView;
 
         public ToppingsHolder(@NonNull View itemView) {
             super(itemView);
