@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.databinding.ObservableArrayList;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -43,8 +44,7 @@ public class AddPizzaActivity extends AppCompatActivity implements AdapterView.O
     private PizzaFactory pizzaStyle;
 //    private Pizza currentPizza;
     private boolean isBYO; //use this to make the recyclerview selectable (isBYO = true)/unselectable (isBYO = false)
-    ObservableArrayList<Topping> toppingOptions; //might not need
-//    private ArrayList<Topping> toppingOptions = Topping.values();
+     ArrayList<Topping> toppingOptions;
     //might need another array for "selected toppings"; premade pizzas will set this automatically, byo will get to choose
 
     //TODO: set up lists of "premade" toppings to assign to recycler view
@@ -57,6 +57,9 @@ public class AddPizzaActivity extends AppCompatActivity implements AdapterView.O
         setContentView(R.layout.addpizza_view);
         findID();
         initToppingOptions();
+        //initialize the toppings list, preselected is empty on start
+        toppingsAdapter = new ToppingsAdapter(this, toppingOptions, new ArrayList<>(), false);
+        rv_toppingOptions.setAdapter(toppingsAdapter);
         initClickListeners();
         initToggleListener();
         initSizeListener();
@@ -68,8 +71,9 @@ public class AddPizzaActivity extends AppCompatActivity implements AdapterView.O
     }
 
     private void initToppingOptions() {
-        toppingOptions = new ObservableArrayList<>();
-        Collections.addAll(toppingOptions, Topping.values());
+        toppingOptions = new ArrayList<>();
+        Topping[] itemList = Topping.values();
+        toppingOptions.addAll(Arrays.asList(itemList));
     }
 
     private void findID() {
