@@ -204,7 +204,7 @@ public class AddPizzaActivity extends AppCompatActivity implements AdapterView.O
 
                 toppingsAdapter.setSelectedToppings(singleton.getPizza().getToppings());
                 toppingsAdapter.setSelectionEnabled(isBYO);
-//            toppingsAdapter.notifyDataSetChanged();
+                toppingsAdapter.notifyDataSetChanged();
             } else {
                 //todo: create a toast or alert dialog
                 Toast.makeText(getApplicationContext(),
