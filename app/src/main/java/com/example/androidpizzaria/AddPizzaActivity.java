@@ -64,6 +64,7 @@ public class AddPizzaActivity extends AppCompatActivity implements AdapterView.O
         initSizeListener();
         //initPizzaOptionListener(); //listener for non-byo
         initSpinner();
+        selectedSize = Size.SMALL;
         sp_pizzaOptions.setOnItemSelectedListener(this);
         //set a default pizza factory for now
         singleton.setPizzaFactory(new ChicagoPizza());
@@ -85,7 +86,6 @@ public class AddPizzaActivity extends AppCompatActivity implements AdapterView.O
         //set all buttons n stuff here
         bt_addPizza = findViewById(R.id.bt_addPizza);
         bt_addPizzaBack = findViewById(R.id.bt_addPizzaBack);
-        //System.out.println(findViewById(R.id.rv_toppingOptions));
         rv_toppingOptions = findViewById(R.id.rv_toppingOptions);
         rg_size = findViewById(R.id.rg_size);
         rb_small = findViewById(R.id.rb_small);
@@ -104,9 +104,7 @@ public class AddPizzaActivity extends AppCompatActivity implements AdapterView.O
     }
 
     private void initSpinner() {
-
         String[] pizzaStyles = {"Deluxe", "BBQ Chicken", "Meatzza", "BYO"}; //TODO: populate with (default) pizzas using pizza factory
-
         pizzasAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, pizzaStyles);
         sp_pizzaOptions.setAdapter(pizzasAdapter);
     }
@@ -181,7 +179,6 @@ public class AddPizzaActivity extends AppCompatActivity implements AdapterView.O
 
         if(singleton.getPizzaFactory() != null){
             if (selectedSize != null) {
-                singleton.getPizza().setSize(selectedSize);
                 switch(selectedItem){
                     case("Deluxe"):
                         singleton.setPizza(singleton.getPizzaFactory().createDeluxe());
