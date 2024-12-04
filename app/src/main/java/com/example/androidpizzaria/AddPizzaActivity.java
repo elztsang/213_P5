@@ -62,7 +62,7 @@ public class AddPizzaActivity extends AppCompatActivity implements AdapterView.O
         initSizeListener();
         //initPizzaOptionListener(); //listener for non-byo
         initSpinner();
-        sp_pizzaOptions.setOnItemClickListener(this); //not sure if should follow thru with recommended change?
+        sp_pizzaOptions.setOnItemSelectedListener(this); //not sure if should follow thru with recommended change?
 //        ToppingsAdapter toppingsAdapter = new ToppingsAdapter(this, toppingOptions);
 //        rv_toppingOptions.setAdapter(new );
     }
