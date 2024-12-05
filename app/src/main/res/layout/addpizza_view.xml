@@ -9,9 +9,16 @@
     <ImageView
         android:id="@+id/pizzaView"
         android:layout_width="match_parent"
-        android:layout_height="278dp"
+        android:layout_height="230dp"
         android:contentDescription="pizzaView"
         tools:src="@tools:sample/avatars" />
+
+    <EditText
+        android:id="@+id/t_dynamicSubtotal"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:ems="10"
+        android:inputType="none"/>
 
     <LinearLayout
         android:layout_width="match_parent"

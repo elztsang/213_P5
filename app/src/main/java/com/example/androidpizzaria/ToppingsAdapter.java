@@ -38,6 +38,8 @@ class ToppingsAdapter extends RecyclerView.Adapter<ToppingsAdapter.ToppingsHolde
     private final ArrayList<Topping> toppings; //need the data binding to each row of RecyclerView
     private boolean isBYOSelected;  // Flag to control selection
 
+    private OnClickListener onClickListener;
+
     Singleton singleton = Singleton.getInstance();
     private Map<Topping, Boolean> toppingSelectionMap; //use this to keep track of if the topping is selected
     private static final Map<Topping, Integer> TOPPING_IMAGE_MAP = new HashMap<>();
@@ -157,6 +159,16 @@ class ToppingsAdapter extends RecyclerView.Adapter<ToppingsAdapter.ToppingsHolde
     @Override
     public int getItemCount() {
         return toppings.size(); //number of MenuItem in the array list.
+    }
+
+
+    public void setOnClickListener(OnClickListener onClickListener) {
+        this.onClickListener = onClickListener;
+    }
+
+    // Interface for the click listener
+    public interface OnClickListener {
+        void onClick(int position, Topping model);
     }
 
     /**

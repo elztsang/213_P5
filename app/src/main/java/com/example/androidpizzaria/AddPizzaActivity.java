@@ -27,13 +27,14 @@ public class AddPizzaActivity extends AppCompatActivity implements AdapterView.O
     RadioButton rb_small, rb_medium, rb_large;
     RadioGroup rg_size;
     //    Switch sw_byo;
+    EditText t_dynamicSubtotal;
     Spinner sp_pizzaOptions;
     ToggleButton tb_chicago;
     ToggleButton tb_ny;
     ImageView pizzaView;
 
     private Size selectedSize;
-    private PizzaFactory pizzaStyle;
+    //private double dynamicSubtotal;
     private boolean isBYO; //use this to make the recyclerview selectable (isBYO = true)/unselectable (isBYO = false)
     ArrayList<Topping> toppingOptions;
     //might need another array for "selected toppings"; premade pizzas will set this automatically, byo will get to choose
@@ -57,6 +58,7 @@ public class AddPizzaActivity extends AppCompatActivity implements AdapterView.O
         toppingsAdapter = new ToppingsAdapter(this, toppingOptions, new ArrayList<>(), isBYO);
         rv_toppingOptions.setAdapter(toppingsAdapter);
         rv_toppingOptions.setLayoutManager(new LinearLayoutManager(this));
+        //initRvListener();
     }
 
     /**
@@ -83,6 +85,7 @@ public class AddPizzaActivity extends AppCompatActivity implements AdapterView.O
         rb_medium = findViewById(R.id.rb_medium);
         rb_large = findViewById(R.id.rb_large);
         sp_pizzaOptions = findViewById(R.id.sp_pizzaOptions);
+        t_dynamicSubtotal = findViewById(R.id.t_dynamicSubtotal);
         tb_chicago = findViewById(R.id.tb_chicago);
         tb_ny = findViewById(R.id.tb_ny);
         pizzaView = findViewById((R.id.pizzaView));
@@ -114,6 +117,7 @@ public class AddPizzaActivity extends AppCompatActivity implements AdapterView.O
                         getString(R.string.select_size_notif),
                         Toast.LENGTH_SHORT).show();
             }
+            buildPizza();
         });
     }
 
@@ -136,13 +140,15 @@ public class AddPizzaActivity extends AppCompatActivity implements AdapterView.O
     private void onAddPizzaClick() {
         //todo: check P4 for all the validity checks
         if (singleton.getPizza() != null) {
-            //scuffed solution
-            String selectedItem = sp_pizzaOptions.getSelectedItem().toString();
-            buildPizza(selectedItem);
-            singleton.getPizza().setToppings(selectedToppings);
+            //System.out.println("add:" + selectedToppings);
+            //singleton.getPizza().setToppings(selectedToppings);
+            //singleton.getPizza().setSize(selectedSize);
+            //System.out.println(singleton.getPizza());
             singleton.getOrder().getPizzas().add(singleton.getPizza());
-            //clear selected toppings
             selectedToppings = new ArrayList<>();
+            //clear selected toppings
+
+            //updateSubtotal();
             Toast.makeText(getApplicationContext(),
                     getString(R.string.add_pizza_success),
                     Toast.LENGTH_SHORT).show();
@@ -153,8 +159,10 @@ public class AddPizzaActivity extends AppCompatActivity implements AdapterView.O
         }
     }
 
-    private void buildPizza(String pizzaType) {
-        switch(pizzaType){
+    private void buildPizza() {
+        String selectedItem = sp_pizzaOptions.getSelectedItem().toString();
+
+        switch(selectedItem){
             case("Deluxe"):
                 singleton.setPizza(singleton.getPizzaFactory().createDeluxe());
                 isBYO = false;
@@ -176,11 +184,24 @@ public class AddPizzaActivity extends AppCompatActivity implements AdapterView.O
         toppingsAdapter.setSelectedToppings(singleton.getPizza().getToppings());
         toppingsAdapter.setBYOSelected(isBYO);
         toppingsAdapter.notifyDataSetChanged();
+
+        //System.out.println(singleton.getPizza());
+
+        updateSubtotal();
     }
 
     private void returnToCreateOrder() {
         Intent intent = new Intent(this, CreateOrderActivity.class);
         startActivity(intent);
+    }
+
+    private void updateSubtotal() {
+        //todo: ensure that it's formatted correctly
+        //System.out.println("im here too");
+        if (singleton.getPizza() != null) {
+            String dynamicSubtotal = "$" + singleton.getPizza().price();
+            t_dynamicSubtotal.setText(dynamicSubtotal);
+        }
     }
 
     /**
@@ -189,11 +210,12 @@ public class AddPizzaActivity extends AppCompatActivity implements AdapterView.O
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         //get the selected item
-        String selectedItem = sp_pizzaOptions.getSelectedItem().toString();
+        //String selectedItem = sp_pizzaOptions.getSelectedItem().toString();
 
         if(singleton.getPizzaFactory() != null){
-            buildPizza(selectedItem);
+            buildPizza();
             selectedToppings = singleton.getPizza().getToppings();
+            //System.out.println("sp:" + selectedToppings);
         } else {
             Toast.makeText(getApplicationContext(),
                     getString(R.string.select_size_notif),
@@ -204,5 +226,15 @@ public class AddPizzaActivity extends AppCompatActivity implements AdapterView.O
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
         //it's fine to leave it blank
+    }
+
+    private void initRvListener() {
+        toppingsAdapter.setOnClickListener(new ToppingsAdapter.OnClickListener() {
+            @Override
+            public void onClick(int position, Topping model) {
+                System.out.println("hi");
+                updateSubtotal();
+            }
+        });
     }
 }
