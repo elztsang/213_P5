@@ -140,7 +140,7 @@ public class AddPizzaActivity extends AppCompatActivity implements AdapterView.O
             //set size, pizzastyle, type
             //getRVSelection();
             singleton.getPizza().setSize(selectedSize);
-            singleton.getPizzaList().add(singleton.getPizza());
+            singleton.getOrder().getPizzas().add(singleton.getPizza());
             Toast.makeText(getApplicationContext(),
                     getString(R.string.add_pizza_success),
                     Toast.LENGTH_SHORT).show();

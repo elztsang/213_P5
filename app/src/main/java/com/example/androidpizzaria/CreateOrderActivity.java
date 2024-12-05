@@ -32,7 +32,7 @@ public class CreateOrderActivity extends AppCompatActivity{
         findID();
         initClickListeners();
         initLVClickListener();
-        initTempOrder(); // for testing - todo: delete later
+//        initTempOrder(); // for testing - todo: delete later
         updateCurrentOrder();
 
         //disable button if order is empty
