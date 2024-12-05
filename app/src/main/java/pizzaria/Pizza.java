@@ -43,7 +43,7 @@ public abstract class Pizza {
         if (toppings == null) {
             toppings = new ArrayList<>();
         }
-        toppings.addAll(toppingsList);
+        toppings = toppingsList;
     }
 
     /** Sets the crust of the pizza.
