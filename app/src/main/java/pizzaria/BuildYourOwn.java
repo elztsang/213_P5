@@ -16,7 +16,8 @@ public class BuildYourOwn extends Pizza{
     private ArrayList<Topping> toppings;
 
     public BuildYourOwn() {
-
+        toppings = new ArrayList<>();
+        super.setToppings(new ArrayList<>());
     }
 
 
@@ -29,6 +30,7 @@ public class BuildYourOwn extends Pizza{
     public BuildYourOwn(Crust crust) {
         super.setCrust(crust);
         toppings = new ArrayList<>();
+        super.setToppings(toppings);
     }
 
     /**
