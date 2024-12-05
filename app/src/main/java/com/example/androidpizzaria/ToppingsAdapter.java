@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.EnumMap;
 
@@ -39,11 +40,14 @@ class ToppingsAdapter extends RecyclerView.Adapter<ToppingsAdapter.ToppingsHolde
 
     Singleton singleton = Singleton.getInstance();
     private Map<Topping, Boolean> toppingSelectionMap; //use this to keep track of if the topping is selected
+    private static final Map<Topping, Integer> TOPPING_IMAGE_MAP = new HashMap<>();
 
     public ToppingsAdapter(Context context, ArrayList<Topping> toppings, ArrayList<Topping> preselectedToppings, boolean isBYOSelected) { //TODO: add a parameter for preselected toppings?
         this.context = context;
         this.toppings = toppings;
         this.isBYOSelected = isBYOSelected;
+
+        initToppingMap();
 
         toppingSelectionMap = new EnumMap<>(Topping.class);
         for (Topping topping : toppings) {
@@ -52,6 +56,22 @@ class ToppingsAdapter extends RecyclerView.Adapter<ToppingsAdapter.ToppingsHolde
             else
                 toppingSelectionMap.put(topping, false);
         }
+    }
+
+    private void initToppingMap(){
+        TOPPING_IMAGE_MAP.put(Topping.ANCHOVY, R.drawable.anchovy);
+        TOPPING_IMAGE_MAP.put(Topping.BBQCHICKEN, R.drawable.bbqchicken);
+        TOPPING_IMAGE_MAP.put(Topping.BEEF, R.drawable.beef);
+        TOPPING_IMAGE_MAP.put(Topping.CHEDDAR, R.drawable.cheddar);
+        TOPPING_IMAGE_MAP.put(Topping.GREENPEPPER, R.drawable.greenpepper);
+        TOPPING_IMAGE_MAP.put(Topping.HAM, R.drawable.ham);
+        TOPPING_IMAGE_MAP.put(Topping.MUSHROOM, R.drawable.mushroom);
+        TOPPING_IMAGE_MAP.put(Topping.OLIVE, R.drawable.olive);
+        TOPPING_IMAGE_MAP.put(Topping.ONION, R.drawable.onion);
+        TOPPING_IMAGE_MAP.put(Topping.PEPPERONI, R.drawable.pepperoni);
+        TOPPING_IMAGE_MAP.put(Topping.PINEAPPLE, R.drawable.pineapple);
+        TOPPING_IMAGE_MAP.put(Topping.PROVOLONE, R.drawable.provolone);
+        TOPPING_IMAGE_MAP.put(Topping.SAUSAGE, R.drawable.sausage);
     }
 
     public void setSelectedToppings(ArrayList<Topping> selectedToppings) {
@@ -93,6 +113,7 @@ class ToppingsAdapter extends RecyclerView.Adapter<ToppingsAdapter.ToppingsHolde
     @Override
     public void onBindViewHolder(@NonNull ToppingsHolder holder, int position) {
         Topping topping = toppings.get(position);
+        holder.bind(topping);
 
         holder.textView.setText(toppings.get(position).name());
 //        holder.imageView.setImageResource(toppings.get(position).getImage()); //need to resolve this
@@ -150,6 +171,16 @@ class ToppingsAdapter extends RecyclerView.Adapter<ToppingsAdapter.ToppingsHolde
             super(itemView);
             textView = itemView.findViewById(R.id.itemText);
             checkBox = itemView.findViewById(R.id.itemCheckBox);
+            imageView = itemView.findViewById(R.id.imageView4); //id is just named this its whatever
+        }
+
+        public void bind(Topping topping) {
+            // Set the image based on the enum value
+            int imageResId = TOPPING_IMAGE_MAP.get(topping);
+            imageView.setImageResource(imageResId);
+
+            // Set the text based on the enum name
+            textView.setText(topping.name());
         }
     }
 }
