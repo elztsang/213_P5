@@ -40,8 +40,9 @@ public class AddPizzaActivity extends AppCompatActivity implements AdapterView.O
     private Size selectedSize;
     private PizzaFactory pizzaStyle;
     private boolean isBYO; //use this to make the recyclerview selectable (isBYO = true)/unselectable (isBYO = false)
-     ArrayList<Topping> toppingOptions;
+    ArrayList<Topping> toppingOptions;
     //might need another array for "selected toppings"; premade pizzas will set this automatically, byo will get to choose
+    private ArrayList<Topping> selectedToppings;
 
     ArrayAdapter<String> pizzasAdapter;
 
@@ -137,27 +138,23 @@ public class AddPizzaActivity extends AppCompatActivity implements AdapterView.O
     private void onAddPizzaClick() {
         //todo: check P4 for all the validity checks
         if (singleton.getPizza() != null) {
-            //set size, pizzastyle, type
-            //getRVSelection();
-            singleton.getPizza().setSize(selectedSize);
-            singleton.getPizzaList().add(singleton.getPizza());
+            //scuffed solution
+            String selectedItem = sp_pizzaOptions.getSelectedItem().toString();
+            buildPizza(selectedItem);
+            singleton.getPizza().setToppings(selectedToppings);
+            singleton.getOrder().getPizzas().add(singleton.getPizza());
+
+            //System.out.println("Added: " + singleton.getPizza());
             Toast.makeText(getApplicationContext(),
                     getString(R.string.add_pizza_success),
                     Toast.LENGTH_SHORT).show();
         } else {
-            //display error somewhere else
             Toast.makeText(getApplicationContext(),
                     getString(R.string.add_pizza_error),
                     Toast.LENGTH_SHORT).show();
-            //System.out.println("unable to add pizza");
         }
     }
 
-    private void getRVSelection() {
-        //todo: get selected pizza style and type from selection in RV, also populate rv
-        //todo: figure out what to do for BYO selection + toppings
-        //not sure if this method is needed yet, need to look more into adapter capabilities -elz
-    }
 
     /**
      * The event handler implemented for "this" object
@@ -168,48 +165,44 @@ public class AddPizzaActivity extends AppCompatActivity implements AdapterView.O
         String selectedItem = sp_pizzaOptions.getSelectedItem().toString(); //get the selected item
 
         if(singleton.getPizzaFactory() != null){
-            if (selectedSize != null) {
-                switch(selectedItem){
-                    case("Deluxe"):
-                        singleton.setPizza(singleton.getPizzaFactory().createDeluxe());
-                        singleton.getPizza().setSize(selectedSize); //temp todo: delete
-                        System.out.println(singleton.getPizza());
-                        isBYO = false;
-                        break;
-                    case("BBQ Chicken"):
-                        singleton.setPizza(singleton.getPizzaFactory().createBBQChicken());
-                        singleton.getPizza().setSize(selectedSize); //temp todo: delete
-                        System.out.println(singleton.getPizza());
-                        isBYO = false;
-                        break;
-                    case("Meatzza"):
-                        singleton.setPizza(singleton.getPizzaFactory().createMeatzza());
-                        singleton.getPizza().setSize(selectedSize); //temp todo: delete
-                        System.out.println(singleton.getPizza());
-                        isBYO = false;
-                        break;
-                    case("BYO"):
-                        singleton.setPizza(singleton.getPizzaFactory().createBuildYourOwn());
-                        singleton.getPizza().setSize(selectedSize); //temp todo: delete
-                        isBYO = true; //update toppings list here? TODO: need to figure out adapter implementation with controller
-                        break;
-                }
-//                toppingsAdapter.clearMap();
-                toppingsAdapter.setSelectedToppings(singleton.getPizza().getToppings());
-                toppingsAdapter.setBYOSelected(isBYO);
-                toppingsAdapter.notifyDataSetChanged();
-            } else {
-                //todo: create a toast or alert dialog
-                Toast.makeText(getApplicationContext(),
-                        getString(R.string.select_size_notif),
-                        Toast.LENGTH_SHORT).show();
-            }
+            buildPizza(selectedItem);
+            selectedToppings = singleton.getPizza().getToppings();
+        } else {
+            Toast.makeText(getApplicationContext(),
+                    getString(R.string.select_size_notif),
+                    Toast.LENGTH_SHORT).show();
         }
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
         //it's fine to leave it blank
+    }
+
+    private void buildPizza(String pizzaType) {
+        switch(pizzaType){
+            case("Deluxe"):
+                singleton.setPizza(singleton.getPizzaFactory().createDeluxe());
+                isBYO = false;
+                break;
+            case("BBQ Chicken"):
+                singleton.setPizza(singleton.getPizzaFactory().createBBQChicken());
+                isBYO = false;
+                break;
+            case("Meatzza"):
+                singleton.setPizza(singleton.getPizzaFactory().createMeatzza());
+                isBYO = false;
+                break;
+            case("BYO"):
+                singleton.setPizza(singleton.getPizzaFactory().createBuildYourOwn());
+                isBYO = true; //update toppings list here? TODO: need to figure out adapter implementation with controller
+                break;
+        }
+        System.out.println(singleton.getPizza().getToppings());
+        singleton.getPizza().setSize(selectedSize);
+        toppingsAdapter.setSelectedToppings(singleton.getPizza().getToppings());
+        toppingsAdapter.setBYOSelected(isBYO);
+        toppingsAdapter.notifyDataSetChanged();
     }
 
     private void returnToCreateOrder() {
