@@ -53,6 +53,18 @@ public class Singleton {
         this.pizza = pizza;
     }
 
+    public void addTopping(Topping topping){
+        if(pizza != null && pizza.getClass().equals(BuildYourOwn.class)){
+            ((BuildYourOwn) pizza).addTopping(topping);
+        }
+    }
+
+    public void removeTopping(Topping topping){
+        if(pizza != null && pizza.getClass().equals(BuildYourOwn.class)){
+            ((BuildYourOwn) pizza).removeTopping(topping);
+        }
+    }
+
     public int getOrderCounter() {
         return this.orderCounter;
     }
