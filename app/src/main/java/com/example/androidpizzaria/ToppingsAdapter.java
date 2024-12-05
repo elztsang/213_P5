@@ -161,16 +161,6 @@ class ToppingsAdapter extends RecyclerView.Adapter<ToppingsAdapter.ToppingsHolde
         return toppings.size(); //number of MenuItem in the array list.
     }
 
-
-    public void setOnClickListener(OnClickListener onClickListener) {
-        this.onClickListener = onClickListener;
-    }
-
-    // Interface for the click listener
-    public interface OnClickListener {
-        void onClick(int position, Topping model);
-    }
-
     /**
      * Get the views from the row layout file, similar to the onCreate() method.
      */
