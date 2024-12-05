@@ -19,11 +19,6 @@ import pizzaria.Size;
 import pizzaria.Topping;
 
 public class AddPizzaActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
-    //id constants
-//    private static final int RBSMALL = R.id.rb_small;
-//    private static final int RBMEDIUM = R.id.rb_medium;
-//    private static final int RBLARGE = R.id.rb_large;
-
     Singleton singleton = Singleton.getInstance();
     ToppingsAdapter toppingsAdapter;
 
@@ -54,20 +49,25 @@ public class AddPizzaActivity extends AppCompatActivity implements AdapterView.O
         initClickListeners();
         initToggleListener();
         initSizeListener();
-        //initPizzaOptionListener(); //listener for non-byo
         initSpinner();
-        selectedSize = Size.SMALL;
-        sp_pizzaOptions.setOnItemSelectedListener(this);
-        //set a default pizza factory for now
-        singleton.setPizzaFactory(new ChicagoPizza());
         initToppingOptions();
-        //initialize the toppings list, preselected is empty on start
-        isBYO = false;
+        setDefaults();
+
+        sp_pizzaOptions.setOnItemSelectedListener(this);
         toppingsAdapter = new ToppingsAdapter(this, toppingOptions, new ArrayList<>(), isBYO);
         rv_toppingOptions.setAdapter(toppingsAdapter);
         rv_toppingOptions.setLayoutManager(new LinearLayoutManager(this));
     }
 
+    /**
+     * Helper method to set default values for adding pizza
+     */
+    private void setDefaults() {
+        selectedSize = Size.SMALL;
+        singleton.setPizzaFactory(new ChicagoPizza());
+        tb_chicago.setChecked(true);
+        isBYO = false;
+    }
     private void initToppingOptions() {
         toppingOptions = new ArrayList<>();
         Topping[] itemList = Topping.values();
@@ -75,7 +75,6 @@ public class AddPizzaActivity extends AppCompatActivity implements AdapterView.O
     }
 
     private void findID() {
-        //set all buttons n stuff here
         bt_addPizza = findViewById(R.id.bt_addPizza);
         bt_addPizzaBack = findViewById(R.id.bt_addPizzaBack);
         rv_toppingOptions = findViewById(R.id.rv_toppingOptions);
@@ -103,7 +102,6 @@ public class AddPizzaActivity extends AppCompatActivity implements AdapterView.O
 
     private void initSizeListener() {
         rg_size.setOnCheckedChangeListener((group, checkedId) -> {
-            //small note to self - ron
             //we hold the sizes for later when we click add pizza
             if (checkedId == rb_small.getId()) {
                 selectedSize = Size.SMALL;
@@ -143,8 +141,8 @@ public class AddPizzaActivity extends AppCompatActivity implements AdapterView.O
             buildPizza(selectedItem);
             singleton.getPizza().setToppings(selectedToppings);
             singleton.getOrder().getPizzas().add(singleton.getPizza());
-
-            //System.out.println("Added: " + singleton.getPizza());
+            //clear selected toppings
+            selectedToppings = new ArrayList<>();
             Toast.makeText(getApplicationContext(),
                     getString(R.string.add_pizza_success),
                     Toast.LENGTH_SHORT).show();
@@ -153,30 +151,6 @@ public class AddPizzaActivity extends AppCompatActivity implements AdapterView.O
                     getString(R.string.add_pizza_error),
                     Toast.LENGTH_SHORT).show();
         }
-    }
-
-
-    /**
-     * The event handler implemented for "this" object
-     */
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//        Pizza selectedPizzaType = (Pizza) sp_pizzaOptions.getSelectedItem(); //get the selected item
-        String selectedItem = sp_pizzaOptions.getSelectedItem().toString(); //get the selected item
-
-        if(singleton.getPizzaFactory() != null){
-            buildPizza(selectedItem);
-            selectedToppings = singleton.getPizza().getToppings();
-        } else {
-            Toast.makeText(getApplicationContext(),
-                    getString(R.string.select_size_notif),
-                    Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-        //it's fine to leave it blank
     }
 
     private void buildPizza(String pizzaType) {
@@ -195,10 +169,9 @@ public class AddPizzaActivity extends AppCompatActivity implements AdapterView.O
                 break;
             case("BYO"):
                 singleton.setPizza(singleton.getPizzaFactory().createBuildYourOwn());
-                isBYO = true; //update toppings list here? TODO: need to figure out adapter implementation with controller
+                isBYO = true;
                 break;
         }
-        System.out.println(singleton.getPizza().getToppings());
         singleton.getPizza().setSize(selectedSize);
         toppingsAdapter.setSelectedToppings(singleton.getPizza().getToppings());
         toppingsAdapter.setBYOSelected(isBYO);
@@ -208,5 +181,28 @@ public class AddPizzaActivity extends AppCompatActivity implements AdapterView.O
     private void returnToCreateOrder() {
         Intent intent = new Intent(this, CreateOrderActivity.class);
         startActivity(intent);
+    }
+
+    /**
+     * The event handler implemented for "this" object
+     */
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        //get the selected item
+        String selectedItem = sp_pizzaOptions.getSelectedItem().toString();
+
+        if(singleton.getPizzaFactory() != null){
+            buildPizza(selectedItem);
+            selectedToppings = singleton.getPizza().getToppings();
+        } else {
+            Toast.makeText(getApplicationContext(),
+                    getString(R.string.select_size_notif),
+                    Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+        //it's fine to leave it blank
     }
 }
