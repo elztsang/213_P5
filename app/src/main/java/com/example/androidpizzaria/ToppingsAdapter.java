@@ -38,16 +38,19 @@ class ToppingsAdapter extends RecyclerView.Adapter<ToppingsAdapter.ToppingsHolde
     private final ArrayList<Topping> toppings; //need the data binding to each row of RecyclerView
     private boolean isBYOSelected;  // Flag to control selection
 
-    private OnClickListener onClickListener;
-
+    Listener listener;
     Singleton singleton = Singleton.getInstance();
     private Map<Topping, Boolean> toppingSelectionMap; //use this to keep track of if the topping is selected
     private static final Map<Topping, Integer> TOPPING_IMAGE_MAP = new HashMap<>();
 
-    public ToppingsAdapter(Context context, ArrayList<Topping> toppings, ArrayList<Topping> preselectedToppings, boolean isBYOSelected) { //TODO: add a parameter for preselected toppings?
+    public ToppingsAdapter(Context context, ArrayList<Topping> toppings,
+                           ArrayList<Topping> preselectedToppings,
+                           boolean isBYOSelected,
+                           Listener listener) { //TODO: add a parameter for preselected toppings?
         this.context = context;
         this.toppings = toppings;
         this.isBYOSelected = isBYOSelected;
+        this.listener = listener;
 
         initToppingMap();
 
@@ -102,6 +105,7 @@ class ToppingsAdapter extends RecyclerView.Adapter<ToppingsAdapter.ToppingsHolde
         //inflate the row layout for the items
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.row_view, parent, false);
+
         return new ToppingsHolder(view);
     }
 
@@ -116,31 +120,51 @@ class ToppingsAdapter extends RecyclerView.Adapter<ToppingsAdapter.ToppingsHolde
     public void onBindViewHolder(@NonNull ToppingsHolder holder, int position) {
         Topping topping = toppings.get(position);
         holder.bind(topping);
-
         holder.textView.setText(toppings.get(position).name());
-//        holder.imageView.setImageResource(toppings.get(position).getImage()); //need to resolve this
 
         holder.checkBox.setEnabled(isBYOSelected);
         holder.checkBox.setOnCheckedChangeListener(null);
         holder.checkBox.setChecked(Boolean.TRUE.equals(toppingSelectionMap.get(topping)));
 
-
         if (isBYOSelected) {
-            holder.checkBox.setEnabled(true);
-            //what this does is it only checks if the state of a checkbox has changed (if checked->unchecked, isChecked = false)
-            holder.checkBox.setOnCheckedChangeListener(((buttonView, isChecked) -> {
-                if (isChecked && getNumToppingsSelected() >= MAX_SELECTION) {
-                    buttonView.setChecked(false);   //auto uncheck button if it goes over max num of toppings
-                } else if (!isChecked && getNumToppingsSelected() <= MAX_SELECTION) {
-                    singleton.removeTopping(topping);
-                    toppingSelectionMap.put(topping, false);
-                } else if (isChecked) {
-                    singleton.addTopping(topping);
-                    toppingSelectionMap.put(topping, isChecked);
-                }
-            }));
-        } else  //if not BYO then it is a premade and nothing should be editable
+            itemViewClickListener(holder, topping);
+            checkBoxClickListener(holder, topping);
+        } else {
+            //disable if not byo
+            holder.itemView.setOnClickListener(null);
             holder.checkBox.setEnabled(false);
+        }
+    }
+
+    private void itemViewClickListener(@NonNull ToppingsHolder holder, Topping topping) {
+        holder.itemView.setOnClickListener(v -> {
+            boolean newCheckedState = !holder.checkBox.isChecked();
+            holder.checkBox.setChecked(newCheckedState);
+
+            if (newCheckedState && getNumToppingsSelected() >= MAX_SELECTION) {
+                holder.checkBox.setChecked(false);
+            } else if (!newCheckedState && getNumToppingsSelected() <= MAX_SELECTION) {
+                singleton.removeTopping(topping);
+                toppingSelectionMap.put(topping, false);
+            } else if (newCheckedState) {
+                singleton.addTopping(topping);
+                toppingSelectionMap.put(topping, true);
+            }
+        });
+    }
+
+    private void checkBoxClickListener(@NonNull ToppingsHolder holder, Topping topping) {
+        holder.checkBox.setOnCheckedChangeListener(((buttonView, isChecked) -> {
+            if (isChecked && getNumToppingsSelected() >= MAX_SELECTION) {
+                buttonView.setChecked(false);
+            } else if (!isChecked && getNumToppingsSelected() <= MAX_SELECTION) {
+                singleton.removeTopping(topping);
+                toppingSelectionMap.put(topping, false);
+            } else if (isChecked) {
+                singleton.addTopping(topping);
+                toppingSelectionMap.put(topping, isChecked);
+            }
+        }));
     }
 
     private int getNumToppingsSelected() {
@@ -184,6 +208,10 @@ class ToppingsAdapter extends RecyclerView.Adapter<ToppingsAdapter.ToppingsHolde
             // Set the text based on the enum name
             textView.setText(topping.name());
         }
+    }
+
+    public static interface Listener{
+        public void onRVClick(String aParamToIdWhatWasClicked);
     }
 }
 

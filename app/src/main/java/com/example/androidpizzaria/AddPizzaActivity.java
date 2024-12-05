@@ -18,7 +18,7 @@ import pizzaria.PizzaFactory;
 import pizzaria.Size;
 import pizzaria.Topping;
 
-public class AddPizzaActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class AddPizzaActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, ToppingsAdapter.Listener {
     Singleton singleton = Singleton.getInstance();
     ToppingsAdapter toppingsAdapter;
 
@@ -38,7 +38,6 @@ public class AddPizzaActivity extends AppCompatActivity implements AdapterView.O
     private boolean isBYO; //use this to make the recyclerview selectable (isBYO = true)/unselectable (isBYO = false)
     ArrayList<Topping> toppingOptions;
     //might need another array for "selected toppings"; premade pizzas will set this automatically, byo will get to choose
-    private ArrayList<Topping> selectedToppings;
 
     ArrayAdapter<String> pizzasAdapter;
 
@@ -55,7 +54,7 @@ public class AddPizzaActivity extends AppCompatActivity implements AdapterView.O
         setDefaults();
 
         sp_pizzaOptions.setOnItemSelectedListener(this);
-        toppingsAdapter = new ToppingsAdapter(this, toppingOptions, new ArrayList<>(), isBYO);
+        toppingsAdapter = new ToppingsAdapter(this, toppingOptions, new ArrayList<>(), isBYO, this);
         rv_toppingOptions.setAdapter(toppingsAdapter);
         rv_toppingOptions.setLayoutManager(new LinearLayoutManager(this));
         //initRvListener();
@@ -93,7 +92,6 @@ public class AddPizzaActivity extends AppCompatActivity implements AdapterView.O
 
     private void initClickListeners() {
         bt_addPizza.setOnClickListener(v -> onAddPizzaClick());
-
         bt_addPizzaBack.setOnClickListener(v -> returnToCreateOrder());
     }
 
@@ -140,15 +138,8 @@ public class AddPizzaActivity extends AppCompatActivity implements AdapterView.O
     private void onAddPizzaClick() {
         //todo: check P4 for all the validity checks
         if (singleton.getPizza() != null) {
-            //System.out.println("add:" + selectedToppings);
-            //singleton.getPizza().setToppings(selectedToppings);
-            //singleton.getPizza().setSize(selectedSize);
-            //System.out.println(singleton.getPizza());
             singleton.getOrder().getPizzas().add(singleton.getPizza());
-            selectedToppings = new ArrayList<>();
-            //clear selected toppings
-
-            //updateSubtotal();
+            //selectedToppings = new ArrayList<>();
             Toast.makeText(getApplicationContext(),
                     getString(R.string.add_pizza_success),
                     Toast.LENGTH_SHORT).show();
@@ -209,13 +200,8 @@ public class AddPizzaActivity extends AppCompatActivity implements AdapterView.O
      */
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        //get the selected item
-        //String selectedItem = sp_pizzaOptions.getSelectedItem().toString();
-
         if(singleton.getPizzaFactory() != null){
             buildPizza();
-            selectedToppings = singleton.getPizza().getToppings();
-            //System.out.println("sp:" + selectedToppings);
         } else {
             Toast.makeText(getApplicationContext(),
                     getString(R.string.select_size_notif),
@@ -228,13 +214,8 @@ public class AddPizzaActivity extends AppCompatActivity implements AdapterView.O
         //it's fine to leave it blank
     }
 
-    private void initRvListener() {
-        toppingsAdapter.setOnClickListener(new ToppingsAdapter.OnClickListener() {
-            @Override
-            public void onClick(int position, Topping model) {
-                System.out.println("hi");
-                updateSubtotal();
-            }
-        });
+    @Override
+    public void onRVClick(String aParamToIdWhatWasClicked) {
+
     }
 }
