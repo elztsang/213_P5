@@ -80,4 +80,9 @@ public class BuildYourOwn extends Pizza{
         toppings.add(topping);
         super.setToppings(toppings);
     }
+
+    public void removeTopping(Topping topping){
+        toppings.remove(topping);
+        super.setToppings(toppings);
+    }
 }

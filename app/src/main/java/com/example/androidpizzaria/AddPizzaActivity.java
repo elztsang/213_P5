@@ -1,7 +1,5 @@
 package com.example.androidpizzaria;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -10,16 +8,12 @@ import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.databinding.ObservableArrayList;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
 import pizzaria.ChicagoPizza;
 import pizzaria.NYPizza;
-import pizzaria.Pizza;
 import pizzaria.PizzaFactory;
 import pizzaria.Size;
 import pizzaria.Topping;
@@ -45,13 +39,10 @@ public class AddPizzaActivity extends AppCompatActivity implements AdapterView.O
 
     private Size selectedSize;
     private PizzaFactory pizzaStyle;
-//    private Pizza currentPizza;
     private boolean isBYO; //use this to make the recyclerview selectable (isBYO = true)/unselectable (isBYO = false)
      ArrayList<Topping> toppingOptions;
     //might need another array for "selected toppings"; premade pizzas will set this automatically, byo will get to choose
 
-    //TODO: set up lists of "premade" toppings to assign to recycler view
-    //also need to make sure recycler view is not selectable when byo is selected
     ArrayAdapter<String> pizzasAdapter;
 
     @Override
@@ -175,7 +166,6 @@ public class AddPizzaActivity extends AppCompatActivity implements AdapterView.O
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 //        Pizza selectedPizzaType = (Pizza) sp_pizzaOptions.getSelectedItem(); //get the selected item
         String selectedItem = sp_pizzaOptions.getSelectedItem().toString(); //get the selected item
-        isBYO = false;
 
         if(singleton.getPizzaFactory() != null){
             if (selectedSize != null) {
@@ -184,16 +174,19 @@ public class AddPizzaActivity extends AppCompatActivity implements AdapterView.O
                         singleton.setPizza(singleton.getPizzaFactory().createDeluxe());
                         singleton.getPizza().setSize(selectedSize); //temp todo: delete
                         System.out.println(singleton.getPizza());
+                        isBYO = false;
                         break;
                     case("BBQ Chicken"):
                         singleton.setPizza(singleton.getPizzaFactory().createBBQChicken());
                         singleton.getPizza().setSize(selectedSize); //temp todo: delete
                         System.out.println(singleton.getPizza());
+                        isBYO = false;
                         break;
                     case("Meatzza"):
                         singleton.setPizza(singleton.getPizzaFactory().createMeatzza());
                         singleton.getPizza().setSize(selectedSize); //temp todo: delete
                         System.out.println(singleton.getPizza());
+                        isBYO = false;
                         break;
                     case("BYO"):
                         singleton.setPizza(singleton.getPizzaFactory().createBuildYourOwn());
@@ -201,9 +194,9 @@ public class AddPizzaActivity extends AppCompatActivity implements AdapterView.O
                         isBYO = true; //update toppings list here? TODO: need to figure out adapter implementation with controller
                         break;
                 }
-
+//                toppingsAdapter.clearMap();
                 toppingsAdapter.setSelectedToppings(singleton.getPizza().getToppings());
-                toppingsAdapter.setSelectionEnabled(isBYO);
+                toppingsAdapter.setBYOSelected(isBYO);
                 toppingsAdapter.notifyDataSetChanged();
             } else {
                 //todo: create a toast or alert dialog
