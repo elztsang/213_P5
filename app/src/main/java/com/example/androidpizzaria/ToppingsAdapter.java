@@ -107,7 +107,7 @@ class ToppingsAdapter extends RecyclerView.Adapter<ToppingsAdapter.ToppingsHolde
             //what this does is it only checks if the state of a checkbox has changed (if checked->unchecked, isChecked = false)
             holder.checkBox.setOnCheckedChangeListener(((buttonView, isChecked) -> {
                 if (isChecked && getNumToppingsSelected() >= MAX_SELECTION) {
-                    buttonView.setEnabled(false);   //auto uncheck button if it goes over max num of toppings
+                    buttonView.setChecked(false);   //auto uncheck button if it goes over max num of toppings
                 } else if (!isChecked && getNumToppingsSelected() <= MAX_SELECTION) {
                     singleton.removeTopping(topping);
                     toppingSelectionMap.put(topping, false);
