@@ -127,6 +127,7 @@ public class AddPizzaActivity extends AppCompatActivity implements AdapterView.O
             if (tb_chicago.isChecked()) {
                 tb_ny.setChecked(false);
                 singleton.setPizzaFactory(new ChicagoPizza());
+                buildPizza();
             }
         });
 
@@ -134,6 +135,7 @@ public class AddPizzaActivity extends AppCompatActivity implements AdapterView.O
             if (tb_ny.isChecked()) {
                 tb_chicago.setChecked(false);
                 singleton.setPizzaFactory(new NYPizza());
+                buildPizza();
             }
         });
     }
