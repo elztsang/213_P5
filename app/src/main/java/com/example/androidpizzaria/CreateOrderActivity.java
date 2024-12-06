@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -22,6 +23,7 @@ import pizzaria.Size;
 public class CreateOrderActivity extends AppCompatActivity{
     Singleton singleton = Singleton.getInstance();
     private Button bt_addPizzas, bt_addOrder, bt_createBackButton;
+    private EditText t_orderTotal, t_pizzaTotal, t_salesTax;
     private ListView lv_curOrder;
 
 
@@ -36,12 +38,16 @@ public class CreateOrderActivity extends AppCompatActivity{
         updateCurrentOrder();
         //disable button if order is empty
         toggleAddOrderWhenValid();
+        updateTotals();
     }
 
     private void findID() {
         bt_addPizzas = findViewById(R.id.bt_addPizzas);
         bt_addOrder = findViewById(R.id.bt_addOrder);
         bt_createBackButton = findViewById(R.id.bt_createBackButton);
+        t_orderTotal = findViewById(R.id.t_orderTotal);
+        t_pizzaTotal = findViewById(R.id.t_pizzaTotal);
+        t_salesTax = findViewById(R.id.t_salesTax);
         lv_curOrder = findViewById(R.id.lv_curOrder);
     }
 
@@ -109,6 +115,7 @@ public class CreateOrderActivity extends AppCompatActivity{
                     getString(R.string.add_order_success),
                     Toast.LENGTH_SHORT).show();
             singleton.setOrder(new Order());
+            updateTotals();
         } else {
             Toast.makeText(getApplicationContext(),
                     getString(R.string.add_order_error),
@@ -148,6 +155,7 @@ public class CreateOrderActivity extends AppCompatActivity{
         builder.setPositiveButton("Yes", (DialogInterface.OnClickListener) (dialog, which) -> {
             singleton.getOrder().getPizzas().remove(selectedPizza);
             updateListView();
+            updateTotals();
         });
 
         builder.setNegativeButton("No", (DialogInterface.OnClickListener) (dialog, which) -> {
@@ -156,6 +164,17 @@ public class CreateOrderActivity extends AppCompatActivity{
 
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
+    }
+
+    private void updateTotals() {
+        String orderTotal = "$" + singleton.getOrder().getOrderTotal();
+        t_orderTotal.setText(orderTotal);
+
+        String salesTax = "$" + singleton.getOrder().getSalesTax();
+        t_salesTax.setText(salesTax);
+
+        String pizzaTotal = "$" + singleton.getOrder().getTotal();
+        t_pizzaTotal.setText(pizzaTotal);
     }
 
     //todo: delete later
