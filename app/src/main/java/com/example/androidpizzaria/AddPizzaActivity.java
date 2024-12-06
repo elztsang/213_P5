@@ -133,6 +133,15 @@ public class AddPizzaActivity extends AppCompatActivity implements AdapterView.O
         });
     }
 
+    private void setPizzaImage(){
+        if(tb_chicago.isChecked()){
+
+        }
+        if(tb_ny.isChecked()){
+
+        }
+    }
+
     private void onAddPizzaClick() {
         //todo: check P4 for all the validity checks
         if (singleton.getPizza() != null) {
