@@ -13,7 +13,6 @@ import pizzaria.*;
 public class Singleton {
     private static Singleton instance = null;
     private Pizza pizza;
-    private ArrayList<Pizza> pizzaList;
     private PizzaFactory pizzaFactory;
     private Order order;
     private ArrayList<Order> orderList;
@@ -25,7 +24,6 @@ public class Singleton {
     private Singleton() {
         orderList = new ArrayList<>();
         order = new Order();
-        pizzaList = new ArrayList<>();
         //idk what to set for pizza/pizzafactory yet
     }
 
@@ -47,10 +45,6 @@ public class Singleton {
      */
     public Pizza getPizza() {
         return pizza;
-    }
-
-    public ArrayList<Pizza> getPizzaList() {
-        return pizzaList;
     }
 
     /**

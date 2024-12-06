@@ -286,8 +286,13 @@ public class AddPizzaActivity extends AppCompatActivity implements AdapterView.O
         //it's fine to leave it blank
     }
 
+    /**
+     * Click listener for recycler view items.
+     * Calls to method to update the subtotal whenever an item in RV is clicked.
+     * @param item item
+     */
     @Override
-    public void onRVClick(String vas) {
+    public void onRVClick(String item) {
         updateSubtotal();
     }
 }
