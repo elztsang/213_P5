@@ -1,6 +1,7 @@
 package com.example.androidpizzaria;
 
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.*;
@@ -14,6 +15,7 @@ import org.w3c.dom.Text;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Map;
 
 import pizzaria.ChicagoPizza;
 import pizzaria.NYPizza;
@@ -35,9 +37,16 @@ public class AddPizzaActivity extends AppCompatActivity implements AdapterView.O
     ToggleButton tb_chicago;
     ToggleButton tb_ny;
     ImageView pizzaView;
+//    Image ch_BBQChicken;
+//    Image ch_Deluxe;
+//    Image ch_Meatzza;
+//    Image ch_BYO;
+//    Image ny_BBQChicken;
+//    Image ny_Deluxe;
+//    Image ny_Meatzza;
+//    Image ny_BYO;
 
     private Size selectedSize;
-    //private double dynamicSubtotal;
     private boolean isBYO; //use this to make the recyclerview selectable (isBYO = true)/unselectable (isBYO = false)
     ArrayList<Topping> toppingOptions;
     //might need another array for "selected toppings"; premade pizzas will set this automatically, byo will get to choose
@@ -60,6 +69,7 @@ public class AddPizzaActivity extends AppCompatActivity implements AdapterView.O
         toppingsAdapter = new ToppingsAdapter(this, toppingOptions, new ArrayList<>(), isBYO, this);
         rv_toppingOptions.setAdapter(toppingsAdapter);
         rv_toppingOptions.setLayoutManager(new LinearLayoutManager(this));
+        updatePizzaImage();
         //initRvListener();
     }
 
@@ -119,6 +129,7 @@ public class AddPizzaActivity extends AppCompatActivity implements AdapterView.O
                         Toast.LENGTH_SHORT).show();
             }
             buildPizza();
+            updatePizzaImage();
         });
     }
 
@@ -128,6 +139,7 @@ public class AddPizzaActivity extends AppCompatActivity implements AdapterView.O
                 tb_ny.setChecked(false);
                 singleton.setPizzaFactory(new ChicagoPizza());
                 buildPizza();
+                updatePizzaImage();
             }
         });
 
@@ -136,6 +148,7 @@ public class AddPizzaActivity extends AppCompatActivity implements AdapterView.O
                 tb_chicago.setChecked(false);
                 singleton.setPizzaFactory(new NYPizza());
                 buildPizza();
+                updatePizzaImage();
             }
         });
     }
@@ -186,6 +199,40 @@ public class AddPizzaActivity extends AppCompatActivity implements AdapterView.O
         updateSubtotal();
     }
 
+    private void updatePizzaImage() {
+        String selectedItem = sp_pizzaOptions.getSelectedItem().toString();
+        switch(selectedItem){
+            case("Deluxe"):
+                if (tb_chicago.isChecked()) {
+                    pizzaView.setImageDrawable(getDrawable(R.drawable.chicagodeluxe));
+                } else {
+                    pizzaView.setImageDrawable(getDrawable(R.drawable.nydeluxe));
+                }
+                break;
+            case("BBQ Chicken"):
+                if (tb_chicago.isChecked()) {
+                    pizzaView.setImageDrawable(getDrawable(R.drawable.chicagobbqchicken));
+                } else {
+                    pizzaView.setImageDrawable(getDrawable(R.drawable.nybbqchicken));
+                }
+                break;
+            case("Meatzza"):
+                if (tb_chicago.isChecked()) {
+                    pizzaView.setImageDrawable(getDrawable(R.drawable.chicagomeatzza));
+                } else {
+                    pizzaView.setImageDrawable(getDrawable(R.drawable.nymeatzza));
+                }
+                break;
+            case("BYO"):
+                if (tb_chicago.isChecked()) {
+                    pizzaView.setImageDrawable(getDrawable(R.drawable.chicagobyo));
+                } else {
+                    pizzaView.setImageDrawable(getDrawable(R.drawable.nybyo));
+                }
+                break;
+        }
+    }
+
     private void returnToCreateOrder() {
         Intent intent = new Intent(this, CreateOrderActivity.class);
         startActivity(intent);
@@ -208,6 +255,7 @@ public class AddPizzaActivity extends AppCompatActivity implements AdapterView.O
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         if(singleton.getPizzaFactory() != null){
             buildPizza();
+            updatePizzaImage();
         } else {
             Toast.makeText(getApplicationContext(),
                     getString(R.string.select_size_notif),

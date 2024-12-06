@@ -171,7 +171,6 @@ public class ManageOrderActivity extends AppCompatActivity{
         alert.setPositiveButton("Yes", (DialogInterface.OnClickListener) (dialog, which) -> {
             singleton.getOrderList().remove(selectedOrder);
             orderListAdapter.notifyDataSetChanged(); //update spinner
-            updateCurrentOrderAdapter(); //update listview to new order
             toggleRemoveOrderIfEmpty();
             clearLVIfEmpty();
             if (singleton.getOrderList().isEmpty()) {
@@ -183,6 +182,7 @@ public class ManageOrderActivity extends AppCompatActivity{
             dialog.cancel();
         });
 
+        updateCurrentOrderAdapter(); //update listview to new order
         AlertDialog alertDialog = alert.create();
         alertDialog.show();
     }
