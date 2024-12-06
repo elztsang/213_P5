@@ -7,7 +7,9 @@
     <TextView
         android:id="@+id/t_orderNumber"
         android:layout_width="match_parent"
-        android:layout_height="50dp" />
+        android:layout_height="50dp"
+        android:fontFamily="sans-serif-black"
+        android:textSize="24sp" />
 
     <ListView
         android:id="@+id/lv_curOrder"
@@ -30,21 +32,24 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight=".5"
-                android:text="Pizza Total" />
+                android:text="Pizza Total"
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/textView2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight=".5"
-                android:text="Sales Tax" />
+                android:text="Sales Tax"
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/textView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight=".5"
-                android:text="Order Total" />
+                android:text="Order Total"
+                android:textSize="16sp" />
 
         </LinearLayout>
 
@@ -60,7 +65,9 @@
                 android:layout_height="wrap_content"
                 android:layout_weight=".5"
                 android:ems="10"
-                android:inputType="none" />
+                android:fontFamily="sans-serif-medium"
+                android:inputType="none"
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/t_salesTax"
@@ -68,7 +75,9 @@
                 android:layout_height="wrap_content"
                 android:layout_weight=".5"
                 android:ems="10"
-                android:inputType="none" />
+                android:fontFamily="sans-serif-medium"
+                android:inputType="none"
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/t_orderTotal"
@@ -76,7 +85,9 @@
                 android:layout_height="wrap_content"
                 android:layout_weight=".5"
                 android:ems="10"
-                android:inputType="none" />
+                android:fontFamily="sans-serif-medium"
+                android:inputType="none"
+                android:textSize="16sp" />
 
         </LinearLayout>
 
