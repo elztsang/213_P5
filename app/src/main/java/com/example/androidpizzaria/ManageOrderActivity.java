@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -28,6 +29,7 @@ import pizzaria.Size;
 public class ManageOrderActivity extends AppCompatActivity{
     Singleton singleton = Singleton.getInstance();
     Button bt_removeOrder, bt_manageBackButton;
+    EditText t_curOrderTotal;
     Spinner sp_selectOrder;
     ListView lv_selectedOrder;
 
@@ -38,7 +40,7 @@ public class ManageOrderActivity extends AppCompatActivity{
         setContentView(R.layout.manageorder_view);
         findID();
         initClickListeners();
-        createTestOrderList(); //for testing todo: delete later
+        //createTestOrderList(); //for testing todo: delete later
         updateSpinner();
         populateListView();
         toggleRemoveOrderIfEmpty();
@@ -48,6 +50,7 @@ public class ManageOrderActivity extends AppCompatActivity{
         bt_removeOrder = findViewById(R.id.bt_removeOrder);
         bt_manageBackButton = findViewById(R.id.bt_manageBackButton);
         sp_selectOrder = findViewById(R.id.sp_selectOrder);
+        t_curOrderTotal = findViewById(R.id.t_curOrderTotal);
         lv_selectedOrder = findViewById(R.id.lv_selectedOrder);
     }
 
@@ -57,6 +60,7 @@ public class ManageOrderActivity extends AppCompatActivity{
             public void onClick(View v) {
                 try {
                     onRemoveOrder();
+                    System.out.println(singleton.getOrderList());
                 } catch (Exception e) {
                     displayRemoveErrorToast();
                     e.printStackTrace();
@@ -102,7 +106,6 @@ public class ManageOrderActivity extends AppCompatActivity{
             dataAdapter.clear();
             dataAdapter.notifyDataSetChanged();
             lv_selectedOrder.setAdapter(dataAdapter);
-
         }
     }
 
@@ -128,6 +131,8 @@ public class ManageOrderActivity extends AppCompatActivity{
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 Order selectedOrder = (Order) parentView.getItemAtPosition(position);
 
+                String curTotal = "$" + selectedOrder.getOrderTotal();
+                t_curOrderTotal.setText(curTotal);
                 dataAdapter.clear();
                 dataAdapter.addAll(selectedOrder.getPizzas());
                 dataAdapter.notifyDataSetChanged();
@@ -138,8 +143,9 @@ public class ManageOrderActivity extends AppCompatActivity{
                 dataAdapter.clear();
                 dataAdapter.notifyDataSetChanged();
 
-                Toast.makeText(getApplicationContext(), "No order selected!", Toast.LENGTH_SHORT).show();
-                //System.out.println("some error");
+                Toast.makeText(getApplicationContext(),
+                        R.string.select_order_notif,
+                        Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -167,6 +173,7 @@ public class ManageOrderActivity extends AppCompatActivity{
         AlertDialog alertDialog = alert.create();
         alertDialog.show();
     }
+
 
     //todo: delete later
     private void createTestOrderList() {
