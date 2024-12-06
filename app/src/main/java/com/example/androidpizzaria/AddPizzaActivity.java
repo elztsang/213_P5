@@ -1,7 +1,6 @@
 package com.example.androidpizzaria;
 
 import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.*;
@@ -10,47 +9,34 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.w3c.dom.Text;
-
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Map;
 
 import pizzaria.ChicagoPizza;
 import pizzaria.NYPizza;
-import pizzaria.PizzaFactory;
 import pizzaria.Size;
 import pizzaria.Topping;
 
+/**
+ *  Activity class that handles creating a single pizza to add to the current order being placed.
+ * @author Ron Chrysler Amistad, Elizabeth Tsang
+ */
 public class AddPizzaActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, ToppingsAdapter.Listener {
+    private Size selectedSize;
+    private boolean isBYO; //use this to make the recyclerview selectable (isBYO = true)/unselectable (isBYO = false)
     Singleton singleton = Singleton.getInstance();
     ToppingsAdapter toppingsAdapter;
-
     Button bt_addPizza, bt_addPizzaBack;
     RecyclerView rv_toppingOptions;
     RadioButton rb_small, rb_medium, rb_large;
     RadioGroup rg_size;
-    //    Switch sw_byo;
     TextView t_dynamicSubtotal;
     Spinner sp_pizzaOptions;
     ToggleButton tb_chicago;
     ToggleButton tb_ny;
     ImageView pizzaView;
-//    Image ch_BBQChicken;
-//    Image ch_Deluxe;
-//    Image ch_Meatzza;
-//    Image ch_BYO;
-//    Image ny_BBQChicken;
-//    Image ny_Deluxe;
-//    Image ny_Meatzza;
-//    Image ny_BYO;
-
-    private Size selectedSize;
-    private boolean isBYO; //use this to make the recyclerview selectable (isBYO = true)/unselectable (isBYO = false)
     ArrayList<Topping> toppingOptions;
-    //might need another array for "selected toppings"; premade pizzas will set this automatically, byo will get to choose
-
     ArrayAdapter<String> pizzasAdapter;
 
     @Override
@@ -70,11 +56,10 @@ public class AddPizzaActivity extends AppCompatActivity implements AdapterView.O
         rv_toppingOptions.setAdapter(toppingsAdapter);
         rv_toppingOptions.setLayoutManager(new LinearLayoutManager(this));
         updatePizzaImage();
-        //initRvListener();
     }
 
     /**
-     * Helper method to set default values for adding pizza
+     * Helper method to set default values the pizza on start.
      */
     private void setDefaults() {
         selectedSize = Size.SMALL;
@@ -82,12 +67,19 @@ public class AddPizzaActivity extends AppCompatActivity implements AdapterView.O
         tb_chicago.setChecked(true);
         isBYO = false;
     }
+
+    /**
+     * Helper method to initialize the list of toppings.
+     */
     private void initToppingOptions() {
         toppingOptions = new ArrayList<>();
         Topping[] itemList = Topping.values();
         toppingOptions.addAll(Arrays.asList(itemList));
     }
 
+    /**
+     * Helper method to initialize all the GUI elements to their respective IDs.
+     */
     private void findID() {
         bt_addPizza = findViewById(R.id.bt_addPizza);
         bt_addPizzaBack = findViewById(R.id.bt_addPizzaBack);
@@ -103,17 +95,26 @@ public class AddPizzaActivity extends AppCompatActivity implements AdapterView.O
         pizzaView = findViewById((R.id.pizzaView));
     }
 
+    /**
+     * Helper method to initialize the listeners for the button to return to the order screen and button to add the pizza to the order.
+     */
     private void initClickListeners() {
         bt_addPizza.setOnClickListener(v -> onAddPizzaClick());
         bt_addPizzaBack.setOnClickListener(v -> returnToCreateOrder());
     }
 
+    /**
+     * Helper method to initialize the spinner object for displaying the selection of pizza types.
+     */
     private void initSpinner() {
         String[] pizzaStyles = {"Deluxe", "BBQ Chicken", "Meatzza", "BYO"}; //TODO: populate with (default) pizzas using pizza factory
         pizzasAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, pizzaStyles);
         sp_pizzaOptions.setAdapter(pizzasAdapter);
     }
 
+    /**
+     * Helper method to initialize the listener for the RadioGroup of pizza sizes.
+     */
     private void initSizeListener() {
         rg_size.setOnCheckedChangeListener((group, checkedId) -> {
             //we hold the sizes for later when we click add pizza
@@ -133,6 +134,10 @@ public class AddPizzaActivity extends AppCompatActivity implements AdapterView.O
         });
     }
 
+    /**
+     * Helper method to initialize the listeners for the toggle buttons Chicago Style and Ny Style.
+     * When one toggle button is checked, the other will be automatically unchecked.
+     */
     private void initToggleListener() {
         tb_chicago.setOnClickListener(v -> {
             if (tb_chicago.isChecked()) {
@@ -153,6 +158,9 @@ public class AddPizzaActivity extends AppCompatActivity implements AdapterView.O
         });
     }
 
+    /**
+     *
+     */
     private void onAddPizzaClick() {
         //todo: check P4 for all the validity checks
         if (singleton.getPizza() != null) {
@@ -168,23 +176,26 @@ public class AddPizzaActivity extends AppCompatActivity implements AdapterView.O
         }
     }
 
+    /**
+     * Helper method to set the pizza in the Singleton class to a pizza according to the options selected by the user.
+     */
     private void buildPizza() {
         String selectedItem = sp_pizzaOptions.getSelectedItem().toString();
 
-        switch(selectedItem){
-            case("Deluxe"):
+        switch (selectedItem) {
+            case ("Deluxe"):
                 singleton.setPizza(singleton.getPizzaFactory().createDeluxe());
                 isBYO = false;
                 break;
-            case("BBQ Chicken"):
+            case ("BBQ Chicken"):
                 singleton.setPizza(singleton.getPizzaFactory().createBBQChicken());
                 isBYO = false;
                 break;
-            case("Meatzza"):
+            case ("Meatzza"):
                 singleton.setPizza(singleton.getPizzaFactory().createMeatzza());
                 isBYO = false;
                 break;
-            case("BYO"):
+            case ("BYO"):
                 singleton.setPizza(singleton.getPizzaFactory().createBuildYourOwn());
                 isBYO = true;
                 break;
@@ -194,40 +205,41 @@ public class AddPizzaActivity extends AppCompatActivity implements AdapterView.O
         toppingsAdapter.setBYOSelected(isBYO);
         toppingsAdapter.notifyDataSetChanged();
 
-        //System.out.println(singleton.getPizza());
-
         updateSubtotal();
     }
 
+    /**
+     * Helper method to update the image of the pizza according to the options selected by the user.
+     */
     private void updatePizzaImage() {
         String selectedItem = sp_pizzaOptions.getSelectedItem().toString();
-        switch(selectedItem){
-            case("Deluxe"):
+        switch (selectedItem) {
+            case ("Deluxe"):
                 if (tb_chicago.isChecked()) {
-                    pizzaView.setImageDrawable(getDrawable(R.drawable.chicagodeluxe));
+                    pizzaView.setImageResource(R.drawable.chicagodeluxe);
                 } else {
-                    pizzaView.setImageDrawable(getDrawable(R.drawable.nydeluxe));
+                    pizzaView.setImageResource(R.drawable.nydeluxe);
                 }
                 break;
-            case("BBQ Chicken"):
+            case ("BBQ Chicken"):
                 if (tb_chicago.isChecked()) {
-                    pizzaView.setImageDrawable(getDrawable(R.drawable.chicagobbqchicken));
+                    pizzaView.setImageResource(R.drawable.chicagobbqchicken);
                 } else {
-                    pizzaView.setImageDrawable(getDrawable(R.drawable.nybbqchicken));
+                    pizzaView.setImageResource(R.drawable.nybbqchicken);
                 }
                 break;
-            case("Meatzza"):
+            case ("Meatzza"):
                 if (tb_chicago.isChecked()) {
-                    pizzaView.setImageDrawable(getDrawable(R.drawable.chicagomeatzza));
+                    pizzaView.setImageResource(R.drawable.chicagomeatzza);
                 } else {
-                    pizzaView.setImageDrawable(getDrawable(R.drawable.nymeatzza));
+                    pizzaView.setImageResource(R.drawable.nymeatzza);
                 }
                 break;
-            case("BYO"):
+            case ("BYO"):
                 if (tb_chicago.isChecked()) {
-                    pizzaView.setImageDrawable(getDrawable(R.drawable.chicagobyo));
+                    pizzaView.setImageResource(R.drawable.chicagobyo);
                 } else {
-                    pizzaView.setImageDrawable(getDrawable(R.drawable.nybyo));
+                    pizzaView.setImageResource(R.drawable.nybyo);
                 }
                 break;
         }
@@ -244,7 +256,8 @@ public class AddPizzaActivity extends AppCompatActivity implements AdapterView.O
             DecimalFormat moneyFormat = new DecimalFormat("###,##0.00");
             String dynamicSubtotal = "$" + singleton.getPizza().price();
             t_dynamicSubtotal.setText(String.format("$%s",
-                    moneyFormat.format(singleton.getPizza().price())));;
+                    moneyFormat.format(singleton.getPizza().price())));
+            ;
         }
     }
 
@@ -253,7 +266,7 @@ public class AddPizzaActivity extends AppCompatActivity implements AdapterView.O
      */
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        if(singleton.getPizzaFactory() != null){
+        if (singleton.getPizzaFactory() != null) {
             buildPizza();
             updatePizzaImage();
         } else {

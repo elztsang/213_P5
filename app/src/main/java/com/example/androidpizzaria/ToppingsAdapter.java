@@ -20,33 +20,31 @@ import java.util.EnumMap;
 import pizzaria.Topping;
 
 /**
- * This is an Adapter class to be used to instantiate an adapter for the RecyclerView.
- * Must extend RecyclerView.Adapter, which will enforce you to implement 3 methods:
- * 1. onCreateViewHolder, 2. onBindViewHolder, and 3. getItemCount
- * <p>
- * You must use the data type <thisClassName.yourHolderName>, in this example
- * <ItemAdapter.ItemHolder>. This will enforce you to define a constructor for the
- * ItemAdapter and an inner class ItemsHolder (a static class)
- * The ItemsHolder class must extend RecyclerView.ViewHolder. In the constructor of this class,
- * you do something similar to the onCreate() method in an Activity.
- *
- * @author Lily Chang
+ * An Adapter class to be used to instantiate an adapter for the RecyclerView of toppings that is used when creating a pizza.
+ * @author Lily Chang, Elizabeth Tsang, Ron Chrysler Amistad
  */
 class ToppingsAdapter extends RecyclerView.Adapter<ToppingsAdapter.ToppingsHolder> {
-    private static final int MAX_SELECTION = 7;
-    private Context context; //need the context to inflate the layout
+    private static final int MAX_SELECTION = 7; //max number of toppings that can be selected
+    private static final Map<Topping, Integer> TOPPING_IMAGE_MAP = new HashMap<>(); //maps a topping to its respective image
     private final ArrayList<Topping> toppings; //need the data binding to each row of RecyclerView
+    private Context context; //need the context to inflate the layout
     private boolean isBYOSelected;  // Flag to control selection
-
+    private Map<Topping, Boolean> toppingSelectionMap; //use this to keep track of if the topping is selected
     Listener listener;
     Singleton singleton = Singleton.getInstance();
-    private Map<Topping, Boolean> toppingSelectionMap; //use this to keep track of if the topping is selected
-    private static final Map<Topping, Integer> TOPPING_IMAGE_MAP = new HashMap<>();
 
+    /**
+     * Constructor for the adaptar.
+     * @param context
+     * @param toppings
+     * @param preselectedToppings
+     * @param isBYOSelected
+     * @param listener
+     */
     public ToppingsAdapter(Context context, ArrayList<Topping> toppings,
                            ArrayList<Topping> preselectedToppings,
                            boolean isBYOSelected,
-                           Listener listener) { //TODO: add a parameter for preselected toppings?
+                           Listener listener) {
         this.context = context;
         this.toppings = toppings;
         this.isBYOSelected = isBYOSelected;
@@ -63,6 +61,9 @@ class ToppingsAdapter extends RecyclerView.Adapter<ToppingsAdapter.ToppingsHolde
         }
     }
 
+    /**
+     * Initializes the mapping of toppings to their respective images.
+     */
     private void initToppingMap(){
         TOPPING_IMAGE_MAP.put(Topping.ANCHOVY, R.drawable.anchovy);
         TOPPING_IMAGE_MAP.put(Topping.BBQCHICKEN, R.drawable.bbqchicken);
@@ -79,6 +80,11 @@ class ToppingsAdapter extends RecyclerView.Adapter<ToppingsAdapter.ToppingsHolde
         TOPPING_IMAGE_MAP.put(Topping.SAUSAGE, R.drawable.sausage);
     }
 
+    /**
+     * Sets the toppings in the map to be selected according to the specified ArrayList of toppings.
+     * If the topping exists in the specified toppings list, the value of the topping in the map is set to true, otherwise false.
+     * @param selectedToppings the list of toppings to set to selected in the toppings map.
+     */
     public void setSelectedToppings(ArrayList<Topping> selectedToppings) {
         for (Topping topping : toppings) {
             if (selectedToppings.contains(topping))
@@ -88,6 +94,11 @@ class ToppingsAdapter extends RecyclerView.Adapter<ToppingsAdapter.ToppingsHolde
         }
     }
 
+    /**
+     * Sets the flag for enabling selection in the recycler view to the specified boolean.
+     * If the pizza type selected in the recycler view is BYO, the flag will be true, otherwise false.
+     * @param BYOSelected the boolean to set the flag to.
+     */
     public void setBYOSelected(boolean BYOSelected) {
         isBYOSelected = BYOSelected;
     }
@@ -171,6 +182,10 @@ class ToppingsAdapter extends RecyclerView.Adapter<ToppingsAdapter.ToppingsHolde
         }));
     }
 
+    /**
+     * Helper method to get the number of toppings selected according to their boolean value in the map.
+     * @return number of toppings that are selected
+     */
     private int getNumToppingsSelected() {
         int num = 0;
         for (boolean isSelected : toppingSelectionMap.values()) {
@@ -180,9 +195,9 @@ class ToppingsAdapter extends RecyclerView.Adapter<ToppingsAdapter.ToppingsHolde
     }
 
     /**
-     * Get the number of items in the ArrayList.
+     * Get the number of toppings in the ArrayList.
      *
-     * @return the number of items in the list.
+     * @return the number of toppings in the list.
      */
     @Override
     public int getItemCount() {
