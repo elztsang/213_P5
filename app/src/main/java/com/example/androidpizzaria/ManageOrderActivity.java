@@ -16,6 +16,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.text.DecimalFormat;
+
 import pizzaria.ChicagoPizza;
 import pizzaria.Order;
 import pizzaria.Pizza;
@@ -178,9 +180,12 @@ public class ManageOrderActivity extends AppCompatActivity{
     }
 
     private void updateCurTotal(Order selectedOrder) {
-        String curTotal = "$" + selectedOrder.getOrderTotal();
-        t_curOrderTotal.setText(curTotal);
+        DecimalFormat moneyFormat = new DecimalFormat("###,##0.00");
+        t_curOrderTotal.setText(String.format("$%s", moneyFormat.format(selectedOrder.getOrderTotal())));
     }
+
+//    DecimalFormat moneyFormat = new DecimalFormat("###,##0.00");
+//        tf_total.setText(String.format("$%s", moneyFormat.format(pizzaOrder.getTotal())))
 
     //todo: delete later
     private void createTestOrderList() {

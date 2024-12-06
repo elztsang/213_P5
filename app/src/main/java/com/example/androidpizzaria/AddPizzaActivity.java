@@ -9,6 +9,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.w3c.dom.Text;
+
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -27,7 +30,7 @@ public class AddPizzaActivity extends AppCompatActivity implements AdapterView.O
     RadioButton rb_small, rb_medium, rb_large;
     RadioGroup rg_size;
     //    Switch sw_byo;
-    EditText t_dynamicSubtotal;
+    TextView t_dynamicSubtotal;
     Spinner sp_pizzaOptions;
     ToggleButton tb_chicago;
     ToggleButton tb_ny;
@@ -188,10 +191,11 @@ public class AddPizzaActivity extends AppCompatActivity implements AdapterView.O
 
     private void updateSubtotal() {
         //todo: ensure that it's formatted correctly
-        //System.out.println("im here too");
         if (singleton.getPizza() != null) {
+            DecimalFormat moneyFormat = new DecimalFormat("###,##0.00");
             String dynamicSubtotal = "$" + singleton.getPizza().price();
-            t_dynamicSubtotal.setText(dynamicSubtotal);
+            t_dynamicSubtotal.setText(String.format("$%s",
+                    moneyFormat.format(singleton.getPizza().price())));;
         }
     }
 

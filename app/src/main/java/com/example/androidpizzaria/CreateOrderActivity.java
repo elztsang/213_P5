@@ -10,9 +10,12 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import java.text.DecimalFormat;
 
 import pizzaria.ChicagoPizza;
 import pizzaria.Order;
@@ -23,7 +26,7 @@ import pizzaria.Size;
 public class CreateOrderActivity extends AppCompatActivity{
     Singleton singleton = Singleton.getInstance();
     private Button bt_addPizzas, bt_addOrder, bt_createBackButton;
-    private EditText t_orderTotal, t_pizzaTotal, t_salesTax;
+    private TextView t_orderTotal, t_pizzaTotal, t_salesTax;
     private ListView lv_curOrder;
 
 
@@ -167,14 +170,16 @@ public class CreateOrderActivity extends AppCompatActivity{
     }
 
     private void updateTotals() {
-        String orderTotal = "$" + singleton.getOrder().getOrderTotal();
-        t_orderTotal.setText(orderTotal);
+        DecimalFormat moneyFormat = new DecimalFormat("###,##0.00");
 
-        String salesTax = "$" + singleton.getOrder().getSalesTax();
-        t_salesTax.setText(salesTax);
+        t_orderTotal.setText(String.format("$%s",
+                moneyFormat.format(singleton.getOrder().getOrderTotal())));
 
-        String pizzaTotal = "$" + singleton.getOrder().getTotal();
-        t_pizzaTotal.setText(pizzaTotal);
+        t_salesTax.setText(String.format("$%s",
+                moneyFormat.format(singleton.getOrder().getSalesTax())));;
+
+        t_pizzaTotal.setText(String.format("$%s",
+                moneyFormat.format(singleton.getOrder().getTotal())));
     }
 
     //todo: delete later
