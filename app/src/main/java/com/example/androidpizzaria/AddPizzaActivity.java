@@ -220,8 +220,6 @@ public class AddPizzaActivity extends AppCompatActivity implements AdapterView.O
 
     @Override
     public void onRVClick(String vas) {
-        //System.out.println(vas);
         updateSubtotal();
-
     }
 }

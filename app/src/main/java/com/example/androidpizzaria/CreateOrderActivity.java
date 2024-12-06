@@ -26,8 +26,9 @@ import pizzaria.Size;
 public class CreateOrderActivity extends AppCompatActivity{
     Singleton singleton = Singleton.getInstance();
     private Button bt_addPizzas, bt_addOrder, bt_createBackButton;
-    private TextView t_orderTotal, t_pizzaTotal, t_salesTax;
+    private TextView t_orderTotal, t_pizzaTotal, t_salesTax, t_orderNumber;
     private ListView lv_curOrder;
+    private ArrayAdapter<Pizza> pizzaArrayAdapter;
 
 
     @Override
@@ -42,6 +43,10 @@ public class CreateOrderActivity extends AppCompatActivity{
         //disable button if order is empty
         toggleAddOrderWhenValid();
         updateTotals();
+        updateCurrentOrderNumber();
+        if (singleton.getOrder() != null) {
+            singleton.getOrder().setOrderNumber(singleton.getOrderCounter());
+        }
     }
 
     private void findID() {
@@ -51,6 +56,7 @@ public class CreateOrderActivity extends AppCompatActivity{
         t_orderTotal = findViewById(R.id.t_orderTotal);
         t_pizzaTotal = findViewById(R.id.t_pizzaTotal);
         t_salesTax = findViewById(R.id.t_salesTax);
+        t_orderNumber = findViewById(R.id.t_orderNumber);
         lv_curOrder = findViewById(R.id.lv_curOrder);
     }
 
@@ -66,7 +72,6 @@ public class CreateOrderActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 onAddOrderClick();
-                updateListView();
                 toggleAddOrderWhenValid();
             }
         });
@@ -110,14 +115,16 @@ public class CreateOrderActivity extends AppCompatActivity{
     }
 
     private void onAddOrderClick() {
-        //add order
         if (singleton.getOrder() != null) {
-            //todo: set order pizzalist(?)
+            singleton.setOrderCounter(singleton.getOrderCounter() + 1); //increment order counter
             singleton.getOrderList().add(singleton.getOrder());
+            updateCurrentOrderNumber();
             Toast.makeText(getApplicationContext(),
                     getString(R.string.add_order_success),
                     Toast.LENGTH_SHORT).show();
             singleton.setOrder(new Order());
+
+            updateCurrentOrder();
             updateTotals();
         } else {
             Toast.makeText(getApplicationContext(),
@@ -127,22 +134,19 @@ public class CreateOrderActivity extends AppCompatActivity{
 
     }
 
+    private void updateCurrentOrderNumber() {
+        t_orderNumber.setText(String.format("Current Order Number: %s",
+                singleton.getOrderCounter()));
+    }
+
     private void updateCurrentOrder(){
-        ArrayAdapter<Pizza> dataAdapter = new ArrayAdapter<Pizza>(this,
+        pizzaArrayAdapter = new ArrayAdapter<Pizza>(this,
                 android.R.layout.simple_selectable_list_item,
                 singleton.getOrder().getPizzas());
 
-        lv_curOrder.setAdapter(dataAdapter);
+        lv_curOrder.setAdapter(pizzaArrayAdapter);
     }
 
-    private void updateListView() {
-        ArrayAdapter<Pizza> dataAdapter = new ArrayAdapter<Pizza>(this,
-                android.R.layout.simple_selectable_list_item,
-                singleton.getOrder().getPizzas());
-
-        dataAdapter.notifyDataSetChanged();
-        lv_curOrder.setAdapter(dataAdapter);
-    }
 
     private void returnToMainMenu() {
         Intent intent = new Intent(this, MainActivity.class);
@@ -157,7 +161,7 @@ public class CreateOrderActivity extends AppCompatActivity{
 
         builder.setPositiveButton("Yes", (DialogInterface.OnClickListener) (dialog, which) -> {
             singleton.getOrder().getPizzas().remove(selectedPizza);
-            updateListView();
+            pizzaArrayAdapter.notifyDataSetChanged();
             updateTotals();
         });
 

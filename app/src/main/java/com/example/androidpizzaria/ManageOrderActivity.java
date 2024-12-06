@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -30,6 +29,8 @@ public class ManageOrderActivity extends AppCompatActivity{
     TextView t_curOrderTotal;
     Spinner sp_selectOrder;
     ListView lv_selectedOrder;
+    ArrayAdapter<Pizza> currentOrderAdapter;
+    ArrayAdapter<Order> orderListAdapter;
 
 
     @Override
@@ -39,16 +40,20 @@ public class ManageOrderActivity extends AppCompatActivity{
         findID();
         initClickListeners();
         //createTestOrderList(); //for testing todo: delete later
-        updateSpinner();
-        populateListView();
-        toggleRemoveOrderIfEmpty();
+        initSpinnerAdapter();
 
         if (sp_selectOrder.getSelectedItem() != null) {
             Order selectedOrder = (Order) sp_selectOrder.getSelectedItem();
+            initCurOrderAdapter(selectedOrder);
             updateCurTotal(selectedOrder);
         } else {
+            initCurOrderAdapter(new Order()); //?
             updateCurTotal(new Order());
         }
+
+        populateListView();
+        toggleRemoveOrderIfEmpty();
+
     }
 
     private void findID() {
@@ -100,32 +105,34 @@ public class ManageOrderActivity extends AppCompatActivity{
     }
 
     private void clearLVIfEmpty() {
-        ArrayAdapter<Pizza> dataAdapter = new ArrayAdapter<Pizza>(this,
-                android.R.layout.simple_list_item_1,
-                singleton.getOrder().getPizzas());
+//        ArrayAdapter<Pizza> dataAdapter = new ArrayAdapter<Pizza>(this,
+//                android.R.layout.simple_list_item_1,
+//                singleton.getOrder().getPizzas());
 
         if (singleton.getOrderList().isEmpty()) {
-            dataAdapter.clear();
-            dataAdapter.notifyDataSetChanged();
-            lv_selectedOrder.setAdapter(dataAdapter);
+            currentOrderAdapter.clear();
+            currentOrderAdapter.notifyDataSetChanged();
+            //lv_selectedOrder.setAdapter(dataAdapter);
         }
     }
 
-    private void updateSpinner() {
-        ArrayAdapter<Order> dataAdapter = new ArrayAdapter<Order>(this,
+    private void initSpinnerAdapter() {
+        orderListAdapter = new ArrayAdapter<Order>(this,
                 android.R.layout.simple_spinner_item,
                 singleton.getOrderList());
 
-        dataAdapter.notifyDataSetChanged();
-        sp_selectOrder.setAdapter(dataAdapter);
+        sp_selectOrder.setAdapter(orderListAdapter);
     }
 
-    private void populateListView() {
-        ArrayAdapter<Pizza> dataAdapter = new ArrayAdapter<Pizza>(this,
+    private void initCurOrderAdapter(Order selectedOrder) {
+        currentOrderAdapter = new ArrayAdapter<Pizza>(this,
                 android.R.layout.simple_list_item_1,
-                singleton.getOrder().getPizzas()); // may need to change
+                selectedOrder.getPizzas());
 
-        lv_selectedOrder.setAdapter(dataAdapter);
+        lv_selectedOrder.setAdapter(currentOrderAdapter);
+    }
+    private void populateListView() {
+        currentOrderAdapter.notifyDataSetChanged();
 
         //update listview on order selection
         sp_selectOrder.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -133,15 +140,15 @@ public class ManageOrderActivity extends AppCompatActivity{
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 Order selectedOrder = (Order) parentView.getItemAtPosition(position);
                 updateCurTotal(selectedOrder);
-                dataAdapter.clear();
-                dataAdapter.addAll(selectedOrder.getPizzas());
-                dataAdapter.notifyDataSetChanged();
+                currentOrderAdapter.clear();
+                currentOrderAdapter.addAll(selectedOrder.getPizzas());
+                currentOrderAdapter.notifyDataSetChanged();
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parentView) {
-                dataAdapter.clear();
-                dataAdapter.notifyDataSetChanged();
+                currentOrderAdapter.clear();
+                currentOrderAdapter.notifyDataSetChanged();
 
                 Toast.makeText(getApplicationContext(),
                         R.string.select_order_notif,
@@ -163,7 +170,7 @@ public class ManageOrderActivity extends AppCompatActivity{
 
         alert.setPositiveButton("Yes", (DialogInterface.OnClickListener) (dialog, which) -> {
             singleton.getOrderList().remove(selectedOrder);
-            updateSpinner();
+            orderListAdapter.notifyDataSetChanged(); //update spinner
             toggleRemoveOrderIfEmpty();
             clearLVIfEmpty();
             if (singleton.getOrderList().isEmpty()) {
