@@ -19,7 +19,8 @@ import pizzaria.Size;
 import pizzaria.Topping;
 
 /**
- *  Activity class that handles creating a single pizza to add to the current order being placed.
+ * Activity class that handles creating a single pizza to add to the current order being placed.
+ *
  * @author Ron Chrysler Amistad, Elizabeth Tsang
  */
 public class AddPizzaActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, ToppingsAdapter.Listener {
@@ -159,7 +160,7 @@ public class AddPizzaActivity extends AppCompatActivity implements AdapterView.O
     }
 
     /**
-     *  Helper method to add the current pizza to the list of pizzas in the singleton class.
+     * Helper method to add the current pizza to the list of pizzas in the singleton class.
      */
     private void onAddPizzaClick() {
         if (singleton.getPizza() != null) {
@@ -288,8 +289,9 @@ public class AddPizzaActivity extends AppCompatActivity implements AdapterView.O
 
     /**
      * Click listener for recycler view items.
-     * Calls to method to update the subtotal whenever an item in RV is clicked.
-     * @param item item
+     * Calls a method to update the subtotal whenever an item in RV is clicked.
+     *
+     * @param item item clicked
      */
     @Override
     public void onRVClick(String item) {

@@ -10,11 +10,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.text.DecimalFormat;
 
-import pizzaria.ChicagoPizza;
 import pizzaria.Order;
 import pizzaria.Pizza;
-import pizzaria.PizzaFactory;
-import pizzaria.Size;
 
 /**
  * Activity to handle displaying the list of pizzas in the order, the subtotal/sales tax/total price of the order,
@@ -112,6 +109,9 @@ public class CreateOrderActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    /**
+     * Helper method to add the current order to the list of orders in the singleton.
+     */
     private void onAddOrderClick() {
         if (singleton.getOrder() != null) {
             singleton.setOrderCounter(singleton.getOrderCounter() + 1); //increment order counter
@@ -162,6 +162,7 @@ public class CreateOrderActivity extends AppCompatActivity {
     /**
      * Helper method to handle the alert displayed when a user attempts to remove the specified pizza from the current order,
      * and removes the pizza from the order if the user confirms their decision to remove the specified pizza.
+     *
      * @param selectedPizza the pizza requested to remove from the current order
      */
     private void createRemovePizzaAlertDialog(Pizza selectedPizza) {
