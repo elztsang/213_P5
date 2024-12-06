@@ -3,11 +3,14 @@ package com.example.androidpizzaria;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+/**
+ *
+ * @author Ron Chrysler Amistad, Elizabeth Tsang
+ */
 public class MainActivity extends AppCompatActivity {
     Singleton singleton = Singleton.getInstance(); //use this to obtain data
     private ImageButton bt_createOrder, bt_manageOrder;

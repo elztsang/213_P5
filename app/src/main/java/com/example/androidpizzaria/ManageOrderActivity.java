@@ -6,12 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ListView;
-import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -23,6 +18,10 @@ import pizzaria.Pizza;
 import pizzaria.PizzaFactory;
 import pizzaria.Size;
 
+/**
+ * Activity class that handles the ability to view and cancel orders that have been placed.
+ * @author Ron Chrysler Amistad, Elizabeth Tsang
+ */
 public class ManageOrderActivity extends AppCompatActivity{
     Singleton singleton = Singleton.getInstance();
     Button bt_removeOrder, bt_manageBackButton;
@@ -49,6 +48,9 @@ public class ManageOrderActivity extends AppCompatActivity{
 
     }
 
+    /**
+     * Helper method to initialize all the GUI elements to their respective IDs.
+     */
     private void findID() {
         bt_removeOrder = findViewById(R.id.bt_removeOrder);
         bt_manageBackButton = findViewById(R.id.bt_manageBackButton);
@@ -57,6 +59,9 @@ public class ManageOrderActivity extends AppCompatActivity{
         lv_selectedOrder = findViewById(R.id.lv_selectedOrder);
     }
 
+    /**
+     * Helper method to initialize the listeners for the button to return to the main menu screen, and button to remove the current selected order.
+     */
     private void initClickListeners() {
         bt_removeOrder.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -157,6 +162,9 @@ public class ManageOrderActivity extends AppCompatActivity{
         });
     }
 
+    /**
+     * Helper method to handle returning to the main menu screen.
+     */
     private void returnToMainMenu() {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
