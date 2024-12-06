@@ -91,11 +91,17 @@ public class ManageOrderActivity extends AppCompatActivity{
         }
     }
 
+    /**
+     * Helper method to
+     */
     private void onRemoveOrder() {
         Order selectedOrder = (Order) sp_selectOrder.getSelectedItem();
         createRemoveOrderAlertDialog(selectedOrder);
     }
 
+    /**
+     * Helper method to display a toast with an error message "Failed to remove order!"
+     */
     private void displayRemoveErrorToast() {
         Toast.makeText(getApplicationContext(),
                 getString(R.string.remove_order_error),
@@ -104,19 +110,18 @@ public class ManageOrderActivity extends AppCompatActivity{
 
     /**
      * Helper method to clear the list view if there are no more remaining orders in the order list.
+     * Otherwise, does nothing.
      */
     private void clearLVIfEmpty() {
-//        ArrayAdapter<Pizza> dataAdapter = new ArrayAdapter<Pizza>(this,
-//                android.R.layout.simple_list_item_1,
-//                singleton.getOrder().getPizzas());
-
         if (singleton.getOrderList().isEmpty()) {
             currentOrderAdapter.clear();
             currentOrderAdapter.notifyDataSetChanged();
-            //lv_selectedOrder.setAdapter(dataAdapter);
         }
     }
 
+    /**
+     * Helper method to initialize the adapter for the spinner to display the orders placed as options.
+     */
     private void initSpinnerAdapter() {
         orderListAdapter = new ArrayAdapter<Order>(this,
                 android.R.layout.simple_spinner_item,
