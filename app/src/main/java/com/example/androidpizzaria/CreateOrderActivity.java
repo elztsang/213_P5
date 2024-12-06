@@ -36,10 +36,8 @@ public class CreateOrderActivity extends AppCompatActivity {
         findID();
         initClickListeners();
         initLVClickListener();
-        //initTempOrder(); // for testing - todo: delete later
         updateCurrentOrder();
-        //disable button if order is empty
-        toggleAddOrderWhenValid();
+        toggleAddOrderWhenValid(); //disable button if order is empty
         updateTotals();
         updateCurrentOrderNumber();
         if (singleton.getOrder() != null) {
@@ -62,7 +60,7 @@ public class CreateOrderActivity extends AppCompatActivity {
     }
 
     /**
-     *
+     * Helper method to initialize the click listeners on the add order, add pizzas, and back buttons.
      */
     private void initClickListeners() {
         bt_addPizzas.setOnClickListener(v -> onAddPizzasClick());
@@ -75,6 +73,10 @@ public class CreateOrderActivity extends AppCompatActivity {
         bt_createBackButton.setOnClickListener(v -> returnToMainMenu());
     }
 
+    /**
+     * Helper method to initialize the click listener on the listview.
+     * Clicking on an item in the listview will trigger a dialog asking the user if they want to remove a pizza.
+     */
     private void initLVClickListener() {
         lv_curOrder.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -91,6 +93,9 @@ public class CreateOrderActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Helper method to toggle the add order button if the list of pizzas in the order is empty.
+     */
     private void toggleAddOrderWhenValid() {
         if (singleton.getOrder().getPizzas().isEmpty()) {
             bt_addOrder.setEnabled(false);
@@ -99,8 +104,9 @@ public class CreateOrderActivity extends AppCompatActivity {
         }
     }
 
-    //maybe rename this button and method to be a bit less confusing
-    //this one is to navigate to the adding pizza menu
+    /**
+     * Helper method that switches to the add pizza activity when called.
+     */
     private void onAddPizzasClick() {
         Intent intent = new Intent(this, AddPizzaActivity.class);
         startActivity(intent);
@@ -193,25 +199,5 @@ public class CreateOrderActivity extends AppCompatActivity {
 
         t_pizzaTotal.setText(String.format("$%s",
                 moneyFormat.format(singleton.getOrder().getTotal())));
-    }
-
-    //todo: delete later
-    private void initTempOrder() {
-        PizzaFactory pf = new ChicagoPizza();
-        Pizza tp = pf.createMeatzza();
-        tp.setSize(Size.SMALL);
-        Pizza tp2 = pf.createDeluxe();
-        tp2.setSize(Size.MEDIUM);
-        Pizza tp3 = pf.createBBQChicken();
-        tp3.setSize(Size.LARGE);
-
-        Order order = new Order();
-        order.addPizza(tp);
-        order.addPizza(tp2);
-        order.addPizza(tp3);
-        order.addPizza(tp2);
-        order.addPizza(tp3);
-        order.setOrderNumber(21);
-        singleton.setOrder(order);
     }
 }

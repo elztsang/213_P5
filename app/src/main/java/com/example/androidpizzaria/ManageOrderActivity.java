@@ -83,6 +83,9 @@ public class ManageOrderActivity extends AppCompatActivity{
         });
     }
 
+    /**
+     * Helper method to disable the remove order button if the list of orders is empty.
+     */
     private void toggleRemoveOrderIfEmpty() {
         if (singleton.getOrderList().isEmpty()) {
             bt_removeOrder.setEnabled(false);
@@ -130,6 +133,9 @@ public class ManageOrderActivity extends AppCompatActivity{
         sp_selectOrder.setAdapter(orderListAdapter);
     }
 
+    /**
+     * Helper method to update current order adapter to read the selected order.
+     */
     private void updateCurrentOrderAdapter() {
         if (sp_selectOrder.getSelectedItem() != null) {
             Order selectedOrder = (Order) sp_selectOrder.getSelectedItem();
@@ -145,6 +151,12 @@ public class ManageOrderActivity extends AppCompatActivity{
 
         lv_selectedOrder.setAdapter(currentOrderAdapter);
     }
+
+    /**
+     * Helper method to populate the listview with the selected item in the spinner.
+     * Also updates the order total to the selected order.
+     * If no order is selected, it will display a toast with a notification alerting the user.
+     */
     private void populateListView() {
         currentOrderAdapter.notifyDataSetChanged();
 
@@ -177,6 +189,12 @@ public class ManageOrderActivity extends AppCompatActivity{
         startActivity(intent);
     }
 
+    /**
+     * Helper method to handle the creation of the remove order alert dialog.
+     * When yes is clicked, it will remove the order from the list and update the respective adapters.
+     * If the order is empty it will clear the list view, reset the price, and toggle the remove button.
+     * @param selectedOrder selected order
+     */
     private void createRemoveOrderAlertDialog(Order selectedOrder) {
         AlertDialog.Builder alert = new AlertDialog.Builder(ManageOrderActivity.this);
         alert.setMessage(getString(R.string.order_remove_alert));
@@ -205,44 +223,12 @@ public class ManageOrderActivity extends AppCompatActivity{
         alertDialog.show();
     }
 
+    /**
+     * Helper method to update the displayed order total to the selected order.
+     * @param selectedOrder selected order.
+     */
     private void updateCurTotal(Order selectedOrder) {
         DecimalFormat moneyFormat = new DecimalFormat("###,##0.00");
         t_curOrderTotal.setText(String.format("$%s", moneyFormat.format(selectedOrder.getOrderTotal())));
-    }
-
-//    DecimalFormat moneyFormat = new DecimalFormat("###,##0.00");
-//        tf_total.setText(String.format("$%s", moneyFormat.format(pizzaOrder.getTotal())))
-
-    //todo: delete later
-    private void createTestOrderList() {
-        PizzaFactory pf = new ChicagoPizza();
-        Pizza tp = pf.createMeatzza();
-        tp.setSize(Size.SMALL);
-
-        Order order1 = new Order();
-        Order order2 = new Order();
-        Order order3 = new Order();
-        order1.addPizza(tp);
-        order3.addPizza(tp);
-        order3.addPizza(tp);
-        order3.addPizza(tp);
-        order3.addPizza(tp);
-
-        singleton.getOrderList().add(order1);
-        singleton.getOrderList().add(order2);
-        singleton.getOrderList().add(order3);
-    }
-
-    //todo: delete later
-    private void addOrderTEMP() {
-        System.out.println(singleton.getOrderList());
-        PizzaFactory pf = new ChicagoPizza();
-        Pizza tp = pf.createMeatzza();
-        tp.setSize(Size.SMALL);
-
-        Order order = new Order();
-        order.addPizza(tp);
-        order.setOrderNumber(21);
-        singleton.getOrderList().add(order);
     }
 }

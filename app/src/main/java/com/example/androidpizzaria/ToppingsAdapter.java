@@ -147,6 +147,11 @@ class ToppingsAdapter extends RecyclerView.Adapter<ToppingsAdapter.ToppingsHolde
         }
     }
 
+    /**
+     * Helper method to initialize the click listener for recycler view items.
+     * @param holder holder
+     * @param topping topping
+     */
     private void itemViewClickListener(@NonNull ToppingsHolder holder, Topping topping) {
         holder.itemView.setOnClickListener(    v -> {
             boolean newCheckedState = !holder.checkBox.isChecked();
@@ -166,6 +171,11 @@ class ToppingsAdapter extends RecyclerView.Adapter<ToppingsAdapter.ToppingsHolde
         });
     }
 
+    /**
+     * Helper method to initialize the listener for the checkboxes in the recycler view
+     * @param holder holder
+     * @param topping topping
+     */
     private void checkBoxClickListener(@NonNull ToppingsHolder holder, Topping topping) {
         holder.checkBox.setOnCheckedChangeListener(((buttonView, isChecked) -> {
             if (isChecked && getNumToppingsSelected() >= MAX_SELECTION) {
@@ -229,6 +239,9 @@ class ToppingsAdapter extends RecyclerView.Adapter<ToppingsAdapter.ToppingsHolde
         }
     }
 
+    /**
+     * A recycler view interface to allow for callbacks
+     */
     public static interface Listener{
         public void onRVClick(String aParamToIdWhatWasClicked);
     }
