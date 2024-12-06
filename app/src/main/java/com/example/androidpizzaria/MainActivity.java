@@ -4,12 +4,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
     Singleton singleton = Singleton.getInstance(); //use this to obtain data
-    private Button bt_createOrder, bt_manageOrder;
+    private ImageButton bt_createOrder, bt_manageOrder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
