@@ -31,6 +31,7 @@ public class ManageOrderActivity extends AppCompatActivity{
     ListView lv_selectedOrder;
     ArrayAdapter<Pizza> currentOrderAdapter;
     ArrayAdapter<Order> orderListAdapter;
+    Order currentSelectedOrder;
 
 
     @Override
@@ -41,15 +42,7 @@ public class ManageOrderActivity extends AppCompatActivity{
         initClickListeners();
         //createTestOrderList(); //for testing todo: delete later
         initSpinnerAdapter();
-
-        if (sp_selectOrder.getSelectedItem() != null) {
-            Order selectedOrder = (Order) sp_selectOrder.getSelectedItem();
-            initCurOrderAdapter(selectedOrder);
-            updateCurTotal(selectedOrder);
-        } else {
-            initCurOrderAdapter(new Order()); //?
-            updateCurTotal(new Order());
-        }
+        updateCurrentOrderAdapter();
 
         populateListView();
         toggleRemoveOrderIfEmpty();
@@ -124,10 +117,19 @@ public class ManageOrderActivity extends AppCompatActivity{
         sp_selectOrder.setAdapter(orderListAdapter);
     }
 
-    private void initCurOrderAdapter(Order selectedOrder) {
-        currentOrderAdapter = new ArrayAdapter<Pizza>(this,
-                android.R.layout.simple_list_item_1,
-                selectedOrder.getPizzas());
+    private void updateCurrentOrderAdapter() {
+        System.out.println(sp_selectOrder.getSelectedItem() != null);
+        if (sp_selectOrder.getSelectedItem() != null) {
+            Order selectedOrder = (Order) sp_selectOrder.getSelectedItem();
+            currentOrderAdapter = new ArrayAdapter<Pizza>(this,
+                    android.R.layout.simple_list_item_1,
+                    selectedOrder.getPizzas());
+        } else {
+            Order empty = new Order();
+            currentOrderAdapter = new ArrayAdapter<Pizza>(this,
+                    android.R.layout.simple_list_item_1,
+                    empty.getPizzas());
+        }
 
         lv_selectedOrder.setAdapter(currentOrderAdapter);
     }
@@ -140,9 +142,7 @@ public class ManageOrderActivity extends AppCompatActivity{
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 Order selectedOrder = (Order) parentView.getItemAtPosition(position);
                 updateCurTotal(selectedOrder);
-                currentOrderAdapter.clear();
-                currentOrderAdapter.addAll(selectedOrder.getPizzas());
-                currentOrderAdapter.notifyDataSetChanged();
+                updateCurrentOrderAdapter();
             }
 
             @Override
@@ -171,6 +171,7 @@ public class ManageOrderActivity extends AppCompatActivity{
         alert.setPositiveButton("Yes", (DialogInterface.OnClickListener) (dialog, which) -> {
             singleton.getOrderList().remove(selectedOrder);
             orderListAdapter.notifyDataSetChanged(); //update spinner
+            updateCurrentOrderAdapter(); //update listview to new order
             toggleRemoveOrderIfEmpty();
             clearLVIfEmpty();
             if (singleton.getOrderList().isEmpty()) {
