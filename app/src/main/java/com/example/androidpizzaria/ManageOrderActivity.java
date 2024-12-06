@@ -131,7 +131,6 @@ public class ManageOrderActivity extends AppCompatActivity{
     }
 
     private void updateCurrentOrderAdapter() {
-        System.out.println(sp_selectOrder.getSelectedItem() != null);
         if (sp_selectOrder.getSelectedItem() != null) {
             Order selectedOrder = (Order) sp_selectOrder.getSelectedItem();
             currentOrderAdapter = new ArrayAdapter<Pizza>(this,
@@ -191,6 +190,9 @@ public class ManageOrderActivity extends AppCompatActivity{
             clearLVIfEmpty();
             if (singleton.getOrderList().isEmpty()) {
                 updateCurTotal(new Order());
+            } else {
+                sp_selectOrder.setSelection(0);
+                updateCurrentOrderAdapter();
             }
         });
 
@@ -198,7 +200,7 @@ public class ManageOrderActivity extends AppCompatActivity{
             dialog.cancel();
         });
 
-        updateCurrentOrderAdapter(); //update listview to new order
+         //update listview to new order
         AlertDialog alertDialog = alert.create();
         alertDialog.show();
     }
