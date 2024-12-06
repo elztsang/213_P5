@@ -137,7 +137,7 @@ class ToppingsAdapter extends RecyclerView.Adapter<ToppingsAdapter.ToppingsHolde
     }
 
     private void itemViewClickListener(@NonNull ToppingsHolder holder, Topping topping) {
-        holder.itemView.setOnClickListener(v -> {
+        holder.itemView.setOnClickListener(    v -> {
             boolean newCheckedState = !holder.checkBox.isChecked();
             holder.checkBox.setChecked(newCheckedState);
 
@@ -150,6 +150,8 @@ class ToppingsAdapter extends RecyclerView.Adapter<ToppingsAdapter.ToppingsHolde
                 singleton.addTopping(topping);
                 toppingSelectionMap.put(topping, true);
             }
+
+            listener.onRVClick(topping.toString());
         });
     }
 
@@ -164,6 +166,8 @@ class ToppingsAdapter extends RecyclerView.Adapter<ToppingsAdapter.ToppingsHolde
                 singleton.addTopping(topping);
                 toppingSelectionMap.put(topping, isChecked);
             }
+
+            listener.onRVClick(topping.toString());
         }));
     }
 
