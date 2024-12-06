@@ -9,7 +9,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-//import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -21,6 +20,7 @@ import pizzaria.Topping;
 
 /**
  * An Adapter class to be used to instantiate an adapter for the RecyclerView of toppings that is used when creating a pizza.
+ *
  * @author Lily Chang, Elizabeth Tsang, Ron Chrysler Amistad
  */
 class ToppingsAdapter extends RecyclerView.Adapter<ToppingsAdapter.ToppingsHolder> {
@@ -34,7 +34,8 @@ class ToppingsAdapter extends RecyclerView.Adapter<ToppingsAdapter.ToppingsHolde
     Singleton singleton = Singleton.getInstance();
 
     /**
-     * Constructor for the adaptar.
+     * Constructor for the adapter.
+     *
      * @param context
      * @param toppings
      * @param preselectedToppings
@@ -64,7 +65,7 @@ class ToppingsAdapter extends RecyclerView.Adapter<ToppingsAdapter.ToppingsHolde
     /**
      * Initializes the mapping of toppings to their respective images.
      */
-    private void initToppingMap(){
+    private void initToppingMap() {
         TOPPING_IMAGE_MAP.put(Topping.ANCHOVY, R.drawable.anchovy);
         TOPPING_IMAGE_MAP.put(Topping.BBQCHICKEN, R.drawable.bbqchicken);
         TOPPING_IMAGE_MAP.put(Topping.BEEF, R.drawable.beef);
@@ -83,6 +84,7 @@ class ToppingsAdapter extends RecyclerView.Adapter<ToppingsAdapter.ToppingsHolde
     /**
      * Sets the toppings in the map to be selected according to the specified ArrayList of toppings.
      * If the topping exists in the specified toppings list, the value of the topping in the map is set to true, otherwise false.
+     *
      * @param selectedToppings the list of toppings to set to selected in the toppings map.
      */
     public void setSelectedToppings(ArrayList<Topping> selectedToppings) {
@@ -97,6 +99,7 @@ class ToppingsAdapter extends RecyclerView.Adapter<ToppingsAdapter.ToppingsHolde
     /**
      * Sets the flag for enabling selection in the recycler view to the specified boolean.
      * If the pizza type selected in the recycler view is BYO, the flag will be true, otherwise false.
+     *
      * @param BYOSelected the boolean to set the flag to.
      */
     public void setBYOSelected(boolean BYOSelected) {
@@ -149,11 +152,12 @@ class ToppingsAdapter extends RecyclerView.Adapter<ToppingsAdapter.ToppingsHolde
 
     /**
      * Helper method to initialize the click listener for recycler view items.
-     * @param holder holder
+     *
+     * @param holder  holder
      * @param topping topping
      */
     private void itemViewClickListener(@NonNull ToppingsHolder holder, Topping topping) {
-        holder.itemView.setOnClickListener(    v -> {
+        holder.itemView.setOnClickListener(v -> {
             boolean newCheckedState = !holder.checkBox.isChecked();
             holder.checkBox.setChecked(newCheckedState);
 
@@ -173,7 +177,8 @@ class ToppingsAdapter extends RecyclerView.Adapter<ToppingsAdapter.ToppingsHolde
 
     /**
      * Helper method to initialize the listener for the checkboxes in the recycler view
-     * @param holder holder
+     *
+     * @param holder  holder
      * @param topping topping
      */
     private void checkBoxClickListener(@NonNull ToppingsHolder holder, Topping topping) {
@@ -194,6 +199,7 @@ class ToppingsAdapter extends RecyclerView.Adapter<ToppingsAdapter.ToppingsHolde
 
     /**
      * Helper method to get the number of toppings selected according to their boolean value in the map.
+     *
      * @return number of toppings that are selected
      */
     private int getNumToppingsSelected() {
@@ -242,7 +248,7 @@ class ToppingsAdapter extends RecyclerView.Adapter<ToppingsAdapter.ToppingsHolde
     /**
      * A recycler view interface to allow for callbacks
      */
-    public static interface Listener{
+    public static interface Listener {
         public void onRVClick(String aParamToIdWhatWasClicked);
     }
 }

@@ -8,7 +8,8 @@ import android.widget.ImageButton;
 import androidx.appcompat.app.AppCompatActivity;
 
 /**
- *  Activity to handle the main menu of the app and being able to open the create order screen or the manage orders screen.
+ * Activity to handle the main menu of the app and being able to open the create order screen or the manage orders screen.
+ *
  * @author Ron Chrysler Amistad, Elizabeth Tsang
  */
 public class MainActivity extends AppCompatActivity {
@@ -22,7 +23,6 @@ public class MainActivity extends AppCompatActivity {
 
         findID();
         initClickListeners();
-        //initSingleton();
     }
 
     /**
@@ -71,5 +71,4 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, ManageOrderActivity.class);
         startActivity(intent);
     }
-
 }

@@ -12,17 +12,15 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.text.DecimalFormat;
 
-import pizzaria.ChicagoPizza;
 import pizzaria.Order;
 import pizzaria.Pizza;
-import pizzaria.PizzaFactory;
-import pizzaria.Size;
 
 /**
  * Activity class that handles the ability to view and cancel orders that have been placed.
+ *
  * @author Ron Chrysler Amistad, Elizabeth Tsang
  */
-public class ManageOrderActivity extends AppCompatActivity{
+public class ManageOrderActivity extends AppCompatActivity {
     Singleton singleton = Singleton.getInstance();
     Button bt_removeOrder, bt_manageBackButton;
     TextView t_curOrderTotal;
@@ -30,8 +28,6 @@ public class ManageOrderActivity extends AppCompatActivity{
     ListView lv_selectedOrder;
     ArrayAdapter<Pizza> currentOrderAdapter;
     ArrayAdapter<Order> orderListAdapter;
-    Order currentSelectedOrder;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,7 +91,7 @@ public class ManageOrderActivity extends AppCompatActivity{
     }
 
     /**
-     * Helper method to
+     * Helper method to call on processes required for removing an order.
      */
     private void onRemoveOrder() {
         Order selectedOrder = (Order) sp_selectOrder.getSelectedItem();
@@ -193,6 +189,7 @@ public class ManageOrderActivity extends AppCompatActivity{
      * Helper method to handle the creation of the remove order alert dialog.
      * When yes is clicked, it will remove the order from the list and update the respective adapters.
      * If the order is empty it will clear the list view, reset the price, and toggle the remove button.
+     *
      * @param selectedOrder selected order
      */
     private void createRemoveOrderAlertDialog(Order selectedOrder) {
@@ -218,13 +215,14 @@ public class ManageOrderActivity extends AppCompatActivity{
             dialog.cancel();
         });
 
-         //update listview to new order
+        //update listview to new order
         AlertDialog alertDialog = alert.create();
         alertDialog.show();
     }
 
     /**
      * Helper method to update the displayed order total to the selected order.
+     *
      * @param selectedOrder selected order.
      */
     private void updateCurTotal(Order selectedOrder) {

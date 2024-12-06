@@ -76,6 +76,12 @@ public class BuildYourOwn extends Pizza{
         super.setToppings(toppings);
     }
 
+    /**
+     * Adds the specified topping to the list of toppings if the specified topping does not exist in the list.
+     * Otherwise, does nothing.
+     *
+     * @param topping the topping to add to the list of toppings
+     */
     public void addTopping(Topping topping){
         if (!toppings.contains(topping)) {
             toppings.add(topping);
@@ -83,6 +89,10 @@ public class BuildYourOwn extends Pizza{
         super.setToppings(toppings);
     }
 
+    /**
+     * Removes the specified topping from the list of toppings.
+     * @param topping the topping to remove from the list
+     */
     public void removeTopping(Topping topping){
         toppings.remove(topping);
         super.setToppings(toppings);
