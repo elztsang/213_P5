@@ -4,20 +4,18 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.text.DecimalFormat;
 
 import pizzaria.ChicagoPizza;
 import pizzaria.Order;
@@ -28,8 +26,12 @@ import pizzaria.Size;
 public class ManageOrderActivity extends AppCompatActivity{
     Singleton singleton = Singleton.getInstance();
     Button bt_removeOrder, bt_manageBackButton;
+    TextView t_curOrderTotal;
     Spinner sp_selectOrder;
     ListView lv_selectedOrder;
+    ArrayAdapter<Pizza> currentOrderAdapter;
+    ArrayAdapter<Order> orderListAdapter;
+    Order currentSelectedOrder;
 
 
     @Override
@@ -38,16 +40,20 @@ public class ManageOrderActivity extends AppCompatActivity{
         setContentView(R.layout.manageorder_view);
         findID();
         initClickListeners();
-        createTestOrderList(); //for testing todo: delete later
-        updateSpinner();
+        //createTestOrderList(); //for testing todo: delete later
+        initSpinnerAdapter();
+        updateCurrentOrderAdapter();
+
         populateListView();
         toggleRemoveOrderIfEmpty();
+
     }
 
     private void findID() {
         bt_removeOrder = findViewById(R.id.bt_removeOrder);
         bt_manageBackButton = findViewById(R.id.bt_manageBackButton);
         sp_selectOrder = findViewById(R.id.sp_selectOrder);
+        t_curOrderTotal = findViewById(R.id.t_curOrderTotal);
         lv_selectedOrder = findViewById(R.id.lv_selectedOrder);
     }
 
@@ -83,8 +89,6 @@ public class ManageOrderActivity extends AppCompatActivity{
     private void onRemoveOrder() {
         Order selectedOrder = (Order) sp_selectOrder.getSelectedItem();
         createRemoveOrderAlertDialog(selectedOrder);
-        toggleRemoveOrderIfEmpty();
-        clearLVIfEmpty();
     }
 
     private void displayRemoveErrorToast() {
@@ -94,52 +98,61 @@ public class ManageOrderActivity extends AppCompatActivity{
     }
 
     private void clearLVIfEmpty() {
-        ArrayAdapter<Pizza> dataAdapter = new ArrayAdapter<Pizza>(this,
-                android.R.layout.simple_list_item_1,
-                singleton.getOrder().getPizzas());
+//        ArrayAdapter<Pizza> dataAdapter = new ArrayAdapter<Pizza>(this,
+//                android.R.layout.simple_list_item_1,
+//                singleton.getOrder().getPizzas());
 
         if (singleton.getOrderList().isEmpty()) {
-            dataAdapter.clear();
-            dataAdapter.notifyDataSetChanged();
-            lv_selectedOrder.setAdapter(dataAdapter);
-
+            currentOrderAdapter.clear();
+            currentOrderAdapter.notifyDataSetChanged();
+            //lv_selectedOrder.setAdapter(dataAdapter);
         }
     }
 
-    private void updateSpinner() {
-        ArrayAdapter<Order> dataAdapter = new ArrayAdapter<Order>(this,
+    private void initSpinnerAdapter() {
+        orderListAdapter = new ArrayAdapter<Order>(this,
                 android.R.layout.simple_spinner_item,
                 singleton.getOrderList());
 
-        dataAdapter.notifyDataSetChanged();
-        sp_selectOrder.setAdapter(dataAdapter);
+        sp_selectOrder.setAdapter(orderListAdapter);
     }
 
-    private void populateListView() {
-        ArrayAdapter<Pizza> dataAdapter = new ArrayAdapter<Pizza>(this,
-                android.R.layout.simple_list_item_1,
-                singleton.getOrder().getPizzas()); // may need to change
+    private void updateCurrentOrderAdapter() {
+        System.out.println(sp_selectOrder.getSelectedItem() != null);
+        if (sp_selectOrder.getSelectedItem() != null) {
+            Order selectedOrder = (Order) sp_selectOrder.getSelectedItem();
+            currentOrderAdapter = new ArrayAdapter<Pizza>(this,
+                    android.R.layout.simple_list_item_1,
+                    selectedOrder.getPizzas());
+        } else {
+            Order empty = new Order();
+            currentOrderAdapter = new ArrayAdapter<Pizza>(this,
+                    android.R.layout.simple_list_item_1,
+                    empty.getPizzas());
+        }
 
-        lv_selectedOrder.setAdapter(dataAdapter);
+        lv_selectedOrder.setAdapter(currentOrderAdapter);
+    }
+    private void populateListView() {
+        currentOrderAdapter.notifyDataSetChanged();
 
         //update listview on order selection
         sp_selectOrder.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 Order selectedOrder = (Order) parentView.getItemAtPosition(position);
-
-                dataAdapter.clear();
-                dataAdapter.addAll(selectedOrder.getPizzas());
-                dataAdapter.notifyDataSetChanged();
+                updateCurTotal(selectedOrder);
+                updateCurrentOrderAdapter();
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parentView) {
-                dataAdapter.clear();
-                dataAdapter.notifyDataSetChanged();
+                currentOrderAdapter.clear();
+                currentOrderAdapter.notifyDataSetChanged();
 
-                Toast.makeText(getApplicationContext(), "No order selected!", Toast.LENGTH_SHORT).show();
-                //System.out.println("some error");
+                Toast.makeText(getApplicationContext(),
+                        R.string.select_order_notif,
+                        Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -157,16 +170,30 @@ public class ManageOrderActivity extends AppCompatActivity{
 
         alert.setPositiveButton("Yes", (DialogInterface.OnClickListener) (dialog, which) -> {
             singleton.getOrderList().remove(selectedOrder);
-            updateSpinner();
+            orderListAdapter.notifyDataSetChanged(); //update spinner
+            toggleRemoveOrderIfEmpty();
+            clearLVIfEmpty();
+            if (singleton.getOrderList().isEmpty()) {
+                updateCurTotal(new Order());
+            }
         });
 
         alert.setNegativeButton("No", (DialogInterface.OnClickListener) (dialog, which) -> {
             dialog.cancel();
         });
 
+        updateCurrentOrderAdapter(); //update listview to new order
         AlertDialog alertDialog = alert.create();
         alertDialog.show();
     }
+
+    private void updateCurTotal(Order selectedOrder) {
+        DecimalFormat moneyFormat = new DecimalFormat("###,##0.00");
+        t_curOrderTotal.setText(String.format("$%s", moneyFormat.format(selectedOrder.getOrderTotal())));
+    }
+
+//    DecimalFormat moneyFormat = new DecimalFormat("###,##0.00");
+//        tf_total.setText(String.format("$%s", moneyFormat.format(pizzaOrder.getTotal())))
 
     //todo: delete later
     private void createTestOrderList() {
