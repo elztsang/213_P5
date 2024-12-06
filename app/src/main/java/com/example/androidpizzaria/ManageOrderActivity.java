@@ -9,16 +9,12 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
 
 import pizzaria.ChicagoPizza;
 import pizzaria.Order;
@@ -29,7 +25,7 @@ import pizzaria.Size;
 public class ManageOrderActivity extends AppCompatActivity{
     Singleton singleton = Singleton.getInstance();
     Button bt_removeOrder, bt_manageBackButton;
-    EditText t_curOrderTotal;
+    TextView t_curOrderTotal;
     Spinner sp_selectOrder;
     ListView lv_selectedOrder;
 
@@ -44,6 +40,13 @@ public class ManageOrderActivity extends AppCompatActivity{
         updateSpinner();
         populateListView();
         toggleRemoveOrderIfEmpty();
+
+        if (sp_selectOrder.getSelectedItem() != null) {
+            Order selectedOrder = (Order) sp_selectOrder.getSelectedItem();
+            updateCurTotal(selectedOrder);
+        } else {
+            updateCurTotal(new Order());
+        }
     }
 
     private void findID() {
@@ -60,7 +63,6 @@ public class ManageOrderActivity extends AppCompatActivity{
             public void onClick(View v) {
                 try {
                     onRemoveOrder();
-                    System.out.println(singleton.getOrderList());
                 } catch (Exception e) {
                     displayRemoveErrorToast();
                     e.printStackTrace();
@@ -87,8 +89,6 @@ public class ManageOrderActivity extends AppCompatActivity{
     private void onRemoveOrder() {
         Order selectedOrder = (Order) sp_selectOrder.getSelectedItem();
         createRemoveOrderAlertDialog(selectedOrder);
-        toggleRemoveOrderIfEmpty();
-        clearLVIfEmpty();
     }
 
     private void displayRemoveErrorToast() {
@@ -130,9 +130,7 @@ public class ManageOrderActivity extends AppCompatActivity{
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 Order selectedOrder = (Order) parentView.getItemAtPosition(position);
-
-                String curTotal = "$" + selectedOrder.getOrderTotal();
-                t_curOrderTotal.setText(curTotal);
+                updateCurTotal(selectedOrder);
                 dataAdapter.clear();
                 dataAdapter.addAll(selectedOrder.getPizzas());
                 dataAdapter.notifyDataSetChanged();
@@ -164,6 +162,11 @@ public class ManageOrderActivity extends AppCompatActivity{
         alert.setPositiveButton("Yes", (DialogInterface.OnClickListener) (dialog, which) -> {
             singleton.getOrderList().remove(selectedOrder);
             updateSpinner();
+            toggleRemoveOrderIfEmpty();
+            clearLVIfEmpty();
+            if (singleton.getOrderList().isEmpty()) {
+                updateCurTotal(new Order());
+            }
         });
 
         alert.setNegativeButton("No", (DialogInterface.OnClickListener) (dialog, which) -> {
@@ -174,6 +177,10 @@ public class ManageOrderActivity extends AppCompatActivity{
         alertDialog.show();
     }
 
+    private void updateCurTotal(Order selectedOrder) {
+        String curTotal = "$" + selectedOrder.getOrderTotal();
+        t_curOrderTotal.setText(curTotal);
+    }
 
     //todo: delete later
     private void createTestOrderList() {
