@@ -15,6 +15,9 @@ public class BuildYourOwn extends Pizza{
 
     private ArrayList<Topping> toppings;
 
+    /**
+     * Default constructor for BYO.
+     */
     public BuildYourOwn() {
         toppings = new ArrayList<>();
         super.setToppings(new ArrayList<>());
