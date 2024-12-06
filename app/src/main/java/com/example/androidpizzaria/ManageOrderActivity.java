@@ -102,6 +102,9 @@ public class ManageOrderActivity extends AppCompatActivity{
                 Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * Helper method to clear the list view if there are no more remaining orders in the order list.
+     */
     private void clearLVIfEmpty() {
 //        ArrayAdapter<Pizza> dataAdapter = new ArrayAdapter<Pizza>(this,
 //                android.R.layout.simple_list_item_1,

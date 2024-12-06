@@ -78,7 +78,7 @@ public class AddPizzaActivity extends AppCompatActivity implements AdapterView.O
     }
 
     /**
-     * Helper method to initialize all the GUI elements to their respective IDs.
+     * Helper method to initialize all the GUI elements with their respective IDs.
      */
     private void findID() {
         bt_addPizza = findViewById(R.id.bt_addPizza);
@@ -159,10 +159,9 @@ public class AddPizzaActivity extends AppCompatActivity implements AdapterView.O
     }
 
     /**
-     *
+     *  Helper method to add the current pizza to the list of pizzas in the singleton class.
      */
     private void onAddPizzaClick() {
-        //todo: check P4 for all the validity checks
         if (singleton.getPizza() != null) {
             singleton.getOrder().getPizzas().add(singleton.getPizza());
             //selectedToppings = new ArrayList<>();
@@ -245,11 +244,17 @@ public class AddPizzaActivity extends AppCompatActivity implements AdapterView.O
         }
     }
 
+    /**
+     * Helper method to call the create order screen.
+     */
     private void returnToCreateOrder() {
         Intent intent = new Intent(this, CreateOrderActivity.class);
         startActivity(intent);
     }
 
+    /**
+     * Helper method to update the subtotal price of the current pizza.
+     */
     private void updateSubtotal() {
         //todo: ensure that it's formatted correctly
         if (singleton.getPizza() != null) {

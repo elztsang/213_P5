@@ -8,7 +8,7 @@ import android.widget.ImageButton;
 import androidx.appcompat.app.AppCompatActivity;
 
 /**
- *
+ *  Activity to handle the main menu of the app and being able to open the create order screen or the manage orders screen.
  * @author Ron Chrysler Amistad, Elizabeth Tsang
  */
 public class MainActivity extends AppCompatActivity {
@@ -36,6 +36,10 @@ public class MainActivity extends AppCompatActivity {
         bt_manageOrder = findViewById(R.id.bt_manageOrder);
     }
 
+    /**
+     * Helper method to initialize the listeners for the button to move to the
+     * create order screen, and the button to move to the manage orders screen.
+     */
     private void initClickListeners() {
         bt_createOrder.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,11 +56,17 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Moves to the Create Order screen.
+     */
     public void onCreateOrderClick() {
         Intent intent = new Intent(this, CreateOrderActivity.class);
         startActivity(intent);
     }
 
+    /**
+     * Moves to the Manage Order screen.
+     */
     public void onManageOrderClick() {
         Intent intent = new Intent(this, ManageOrderActivity.class);
         startActivity(intent);
